@@ -1,5 +1,7 @@
 package clases;
 
+import excepciones.CredencialesIncorrectasException;
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -10,12 +12,12 @@ public abstract class Persona {
     protected String nacionalidad;
     protected Direccion direccion;
     protected String correoElectronico;
-    protected String contraseñaEncriptada;
+    protected String contraseniaEncriptada;
     protected LocalDate fechaNacimiento;
 
     // Constructor
     public Persona(String dni, String nombre, String apellido, String nacionalidad,
-                   Direccion direccion, String correoElectronico, String contraseña,
+                   Direccion direccion, String correoElectronico, String contrasenia,
                    LocalDate fechaNacimiento) {
         this.dni = dni;
         this.nombre = nombre;
@@ -23,8 +25,12 @@ public abstract class Persona {
         this.nacionalidad = nacionalidad;
         this.direccion = direccion;
         this.correoElectronico = correoElectronico;
-        this.contraseñaEncriptada = Seguridad.encriptar(contraseña);
+        this.contraseniaEncriptada = Seguridad.encriptar(contrasenia);
         this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Persona() {
+
     }
 
     // *** Getters ***
@@ -56,7 +62,7 @@ public abstract class Persona {
         return fechaNacimiento;
     }
 
-    // Calcula la edad dinámicamente
+    // Calcula la edad dinamicamente
     public int getEdad() {
         if (fechaNacimiento == null) return 0;
         return Period.between(fechaNacimiento, LocalDate.now()).getYears();
@@ -92,21 +98,32 @@ public abstract class Persona {
     }
 
     //  Verifica la contraseña encriptado contra la ingresada por el usurio
-    public boolean verificarContraseña(String contraseñaIngresada) {
-        return Seguridad.encriptar(contraseñaIngresada).equals(this.contraseñaEncriptada);
+    public boolean verificarContrasenia(String contraseñaIngresada) {
+        return Seguridad.encriptar(contraseñaIngresada).equals(this.contraseniaEncriptada);
     }
 
     // Para actualiar la contraseña primero, se verfica la actual, luego se modifica y se encripta
-    public boolean cambiarContraseña(String actual, String nueva) {
-        if (verificarContraseña(actual)) {
-            this.contraseñaEncriptada = Seguridad.encriptar(nueva);
+    public boolean cambiarContrasenia(String actual, String nueva) {
+        if (verificarContrasenia(actual)) {
+            this.contraseniaEncriptada = Seguridad.encriptar(nueva);
             return true;
         }
         return false;
     }
+    public boolean login(String email, String contrasenia) throws CredencialesIncorrectasException {
+        // Se valida primero el correo y luego la contrasenia
+        // Se usa equalsIgnoreCase para ser flexible con el correo, pero puedes usar equals() si el case es estricto.
+        if (this.correoElectronico.equalsIgnoreCase(email) && verificarContrasenia(contrasenia)) {
+            // Éxito en el login
+            return true;
+        } else {
+            // Si falla la validación del correo O la contraseña
+            throw new CredencialesIncorrectasException("El email o la contrasenia ingresados son incorrectos.");
+        }
+    }
 
-    public String getContraseñaEncriptada() {
-        return contraseñaEncriptada;
+    public String getContraseniaEncriptada() {
+        return contraseniaEncriptada;
     }
 
     @Override
