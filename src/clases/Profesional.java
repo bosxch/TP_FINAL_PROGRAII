@@ -1,6 +1,6 @@
 package clases;
 
-import Enums.Especialidad;
+import enums.Especialidad;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

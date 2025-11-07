@@ -1,0 +1,178 @@
+{
+  "hospital": {
+    "nombre": "Hospital Universitario UTN - Sede Central",
+    "direccion": {
+      "calle": "Avenida Belgrano",
+      "numero": 3000,
+      "departamento": "PB",
+      "ciudad": "Mar del Plata"
+    },
+    "profesionales": [
+      {
+        "dni": "30123456",
+        "nombre": "Laura",
+        "apellido": "Gimenez",
+        "nacionalidad": "Argentina",
+        "direccion": {
+          "calle": "Calle Falsa",
+          "numero": 123,
+          "departamento": "1A",
+          "ciudad": "Mar del Plata"
+        },
+        "correoElectronico": "laura.gimenez@utn.com",
+        "contraseniaEncriptada": "c8651c565c192d4ab2a609d587c6b54c",
+        "fechaNacimiento": "1985-06-20",
+        "legajo": "P001",
+        "matricula": "MN-45678",
+        "especialidad": "CLINICO",
+        "agenda": [
+          {
+            "idDisponibilidad": "S10A",
+            "dia": "2025-11-10",
+            "horario": "09:00",
+            "isDisponible": false,
+            "turnoAsignado": {
+              "idTurno": "T001",
+              "idPaciente": "35888999",
+              "idProfesional": "P001",
+              "dia": "2025-11-10",
+              "hora": "09:00"
+            }
+          },
+          {
+            "idDisponibilidad": "S10B",
+            "dia": "2025-11-10",
+            "horario": "09:15",
+            "isDisponible": true
+          }
+        ]
+      },
+      {
+        "dni": "30555666",
+        "nombre": "Andres",
+        "apellido": "Precklel",
+        "nacionalidad": "Argentina",
+        "direccion": {
+          "calle": "Av. Libertadores",
+          "numero": 800,
+          "departamento": "3C",
+          "ciudad": "Mar del Plata"
+        },
+        "correoElectronico": "andres.precklel@utn.com",
+        "contraseniaEncriptada": "0192023a7bbd73250516f069df18b500",
+        "fechaNacimiento": "1975-01-25",
+        "legajo": "P002",
+        "matricula": "MN-99331",
+        "especialidad": "CARDIOLOGO",
+        "agenda": [
+          {
+            "idDisponibilidad": "S20A",
+            "dia": "2025-11-12",
+            "horario": "08:00",
+            "isDisponible": true
+          },
+          {
+            "idDisponibilidad": "S20B",
+            "dia": "2025-11-12",
+            "horario": "08:15",
+            "isDisponible": true
+          }
+        ]
+      }
+    ],
+    "pacientes": [
+      {
+        "dni": "35888999",
+        "nombre": "Mateo",
+        "apellido": "Menna",
+        "nacionalidad": "Argentina",
+        "direccion": {
+          "calle": "Calle Verdadera",
+          "numero": 456,
+          "departamento": null,
+          "ciudad": "Mar del Plata"
+        },
+        "correoElectronico": "mateo@mail.com",
+        "contraseniaEncriptada": "f1a04d0c3679d73d9d30c5e796851608",
+        "fechaNacimiento": "1995-10-20",
+        "nroAfiliado": "AF-998877",
+        "obraSocial": "OSDE",
+        "historiaClinica": {
+          "idHistoriaClinica": "HC-35888999",
+          "idPaciente": "35888999",
+          "recetasEmitidas": [
+            {
+              "idReceta": "R001",
+              "medicamento": "Ibuprofeno",
+              "dosis": "400mg, cada 8hs",
+              "fechaEmision": "2025-10-25"
+            }
+          ],
+          "antecedentesMedicos": [
+            {
+              "idRegistro": "A001",
+              "descripcion": "Alergia a la penicilina",
+              "tipoAntecedente": "ALERGIA",
+              "fechaRegistro": "2018-01-01"
+            }
+          ]
+        }
+      },
+      {
+        "dni": "38777888",
+        "nombre": "Manuel",
+        "apellido": "Del Bo",
+        "nacionalidad": "Italiana",
+        "direccion": {
+          "calle": "Italia",
+          "numero": 1500,
+          "departamento": "2",
+          "ciudad": "Mar del Plata"
+        },
+        "correoElectronico": "manuel.delbo@mail.com",
+        "contraseniaEncriptada": "e10adc3949ba59abbe56e057f20f883e",
+        "fechaNacimiento": "1998-08-15",
+        "nroAfiliado": "AF-3877",
+        "obraSocial": "IOMA",
+        "historiaClinica": {
+          "idHistoriaClinica": "HC-38777888",
+          "idPaciente": "38777888",
+          "recetasEmitidas": [],
+          "antecedentesMedicos": [
+            {
+              "idRegistro": "A002",
+              "descripcion": "Cirugia de apéndice en 2010",
+              "tipoAntecedente": "QUIRURGICO",
+              "fechaRegistro": "2010-05-10"
+            },
+            {
+              "idRegistro": "A003",
+              "descripcion": "Diagnostico de asma infantil",
+              "tipoAntecedente": "CRONICO",
+              "fechaRegistro": "2005-01-01"
+            }
+          ]
+        }
+      }
+    ],
+    "administrativos": [
+      {
+        "dni": "25444555",
+        "nombre": "Amparo",
+        "apellido": "Cardoso",
+        "nacionalidad": "Argentina",
+        "direccion": {
+          "calle": "Calle Admin",
+          "numero": 789,
+          "departamento": "2B",
+          "ciudad": "Mar del Plata"
+        },
+        "correoElectronico": "amparo.cardoso@utn.com",
+        "contraseniaEncriptada": "0192023a7bbd73250516f069df18b500",
+        "fechaNacimiento": "1990-03-10",
+        "legajo": "A002",
+        "sector": "Recepcion y Archivo"
+      }
+    ]
+  }
+}

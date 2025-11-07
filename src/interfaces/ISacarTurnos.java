@@ -1,6 +1,6 @@
-package Interfaz;
+package interfaces;
 
-import Enums.Especialidad;
+import enums.Especialidad;
 import clases.Profesional;
 import clases.Turno;
 
