@@ -97,6 +97,8 @@ public abstract class Persona {
         this.fechaNacimiento = fechaNacimiento;
     }
 
+    public abstract String getTipo();
+
     //  Verifica la contraseña encriptado contra la ingresada por el usurio
     public boolean verificarContrasenia(String contraseñaIngresada) {
         return Seguridad.encriptar(contraseñaIngresada).equals(this.contraseniaEncriptada);
@@ -112,12 +114,12 @@ public abstract class Persona {
     }
     public boolean login(String email, String contrasenia) throws CredencialesIncorrectasException {
         // Se valida primero el correo y luego la contrasenia
-        // Se usa equalsIgnoreCase para ser flexible con el correo, pero puedes usar equals() si el case es estricto.
+        // Se usa equalsIgnoreCase para ser flexible con el correo, ignorando mayusculas y minisculas
         if (this.correoElectronico.equalsIgnoreCase(email) && verificarContrasenia(contrasenia)) {
-            // Éxito en el login
+            // login correcto
             return true;
         } else {
-            // Si falla la validación del correo O la contraseña
+            // Si falla la validación del correo o la contraseña
             throw new CredencialesIncorrectasException("El email o la contrasenia ingresados son incorrectos.");
         }
     }

@@ -36,6 +36,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     public Profesional() {
         this.agenda = new ArrayList<>();
     }
+    @Override
+    public String getTipo() {
+        return "Profesional";
+    }
 
     // GENERA AGENDA PARA LOS PROXIMOS 5 DÌAS HÀBILES
     private List<Turno> generarAgenda()

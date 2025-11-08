@@ -54,6 +54,10 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     public void setHistoriaClinica(HistoriaClinica historiaClinica) {
         this.historiaClinica = historiaClinica;
     }
+    @Override
+    public String getTipo() {
+        return "Paciente";
+    }
 
     //METODO PARA CONSULTAR HISTORIAL DE TURNOS
     @Override
@@ -65,6 +69,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     }
 
     //METODO PARA CONSULTAR RECETAS
+    @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
             return historiaClinica.getRecetasEmitidas();
