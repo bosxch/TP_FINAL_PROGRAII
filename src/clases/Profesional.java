@@ -21,7 +21,7 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         super(dni, nombre, apellido, nacionalidad, direccion, correoElectronico, contraseña, fechaNacimiento, legajo);
         this.matricula = matricula;
         this.especialidad = especialidad;
-        this.agenda = generarAgenda();
+        this.agenda = agenda != null ? agenda : new ArrayList<>();
         this.todasLasHistorias = new ArrayList<>();
     }
 
