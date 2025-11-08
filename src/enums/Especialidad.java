@@ -1,8 +1,14 @@
 package enums;
 
 public enum Especialidad {
-    CLINICO,
+    CARDIOLOGO,
     CIRUJANO,
+    CLINICO,
     DERMATOLOGO,
-    GUARDIA
+    GINECOLOGO,
+    GUARDIA,
+    NEUROLOGO,
+    ORTOPEDISTA,
+    PEDIATRA,
+    PSIQUIATRA
 }
