@@ -66,6 +66,37 @@ public class HistoriaClinica<T> {
         return ultimaActualizacion;
     }
 
+    public void setIdHistoriaClinica(String idHistoriaClinica) {
+        this.idHistoriaClinica = idHistoriaClinica;
+    }
+
+    public void setIdPaciente(T idPaciente) {
+        this.idPaciente = idPaciente;
+    }
+
+    public void setHistorialTurnos(List<Turno> historialTurnos) {
+        this.historialTurnos = historialTurnos;
+    }
+
+    public void setRecetasEmitidas(List<Receta> recetasEmitidas) {
+        this.recetasEmitidas = recetasEmitidas;
+    }
+
+    public void setAntecedentesMedicos(List<Antecedentes> antecedentesMedicos) {
+        this.antecedentesMedicos = antecedentesMedicos;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public void setUltimaActualizacion(LocalDateTime ultimaActualizacion) {
+        this.ultimaActualizacion = ultimaActualizacion;
+    }
 
     @Override
     public String toString() {

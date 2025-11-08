@@ -1,5 +1,9 @@
 package clases;
 
+import ManejoJSON.JSONUtiles;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,12 +30,7 @@ public class GestionUsuarios {
         this.usuarios.add(usuario);
     }
 
-    //CARGAR PACIENTES DESDE ARCHIVO JSON
 
-    public void cargarPacienteDesdeJson(String rutaArchivo)
-    {
-        
-    }
 
 
     //Login centralizado: devuelve el usuario correspondiente según su tipo

@@ -8,6 +8,7 @@
     "direccion": {
       "calle": "Sarmiento",
       "numero": 500,
+      "departamento": "1",
       "ciudad": "Buenos Aires",
       "provincia": "Buenos Aires"
     },
@@ -16,7 +17,7 @@
     "fechaNacimiento": "1980-06-12",
     "legajo": "P001",
     "matricula": "M-12345",
-    "especialidad": "CARDIOLOGIA",
+    "especialidad": "CARDIOLOGO",
     "agenda": [
       {
         "idTurno": "T1",
@@ -43,6 +44,7 @@
     "direccion": {
       "calle": "Alsina",
       "numero": 800,
+      "departamento": "3",
       "ciudad": "La Plata",
       "provincia": "Buenos Aires"
     },
@@ -51,7 +53,7 @@
     "fechaNacimiento": "1985-03-22",
     "legajo": "P002",
     "matricula": "M-67890",
-    "especialidad": "PEDIATRIA",
+    "especialidad": "PEDIATRA",
     "agenda": [
       {
         "idTurno": "T3",
@@ -78,6 +80,7 @@
     "direccion": {
       "calle": "Lavalle",
       "numero": 120,
+      "departamento": "4",
       "ciudad": "Buenos Aires",
       "provincia": "Buenos Aires"
     },
@@ -96,6 +99,7 @@
     "direccion": {
       "calle": "Mitre",
       "numero": 890,
+      "departamento": "5",
       "ciudad": "Rosario",
       "provincia": "Santa Fe"
     },
@@ -110,13 +114,13 @@
     "nombre": "Julieta",
     "apellido": "Ramírez",
     "nacionalidad": "Argentina",
-    "direccion": { "calle": "Mitre", "numero": 200, "ciudad": "Rosario", "provincia": "Santa Fe" },
+    "direccion": { "calle": "Mitre", "numero": 200, "departamento": "5", "ciudad": "Rosario", "provincia": "Santa Fe" },
     "correoElectronico": "julieta.ramirez@hospital.com",
     "contrasenia": "juli123",
     "fechaNacimiento": "1987-02-10",
     "legajo": "P003",
     "matricula": "M-34567",
-    "especialidad": "DERMATOLOGIA",
+    "especialidad": "DERMATOLOGO",
     "agenda": []
   },
   {
@@ -124,13 +128,13 @@
     "nombre": "Lucas",
     "apellido": "Paz",
     "nacionalidad": "Argentina",
-    "direccion": { "calle": "Belgrano", "numero": 912, "ciudad": "Córdoba", "provincia": "Córdoba" },
+    "direccion": { "calle": "Belgrano", "numero": 912, "departamento": "2","ciudad": "Córdoba", "provincia": "Córdoba" },
     "correoElectronico": "lucas.paz@hospital.com",
     "contrasenia": "lucasp",
     "fechaNacimiento": "1990-04-19",
     "legajo": "P004",
     "matricula": "M-45678",
-    "especialidad": "TRAUMATOLOGIA",
+    "especialidad": "CIRUJANO",
     "agenda": []
   },
   {
@@ -138,13 +142,13 @@
     "nombre": "Ana",
     "apellido": "Fernández",
     "nacionalidad": "Argentina",
-    "direccion": { "calle": "Italia", "numero": 410, "ciudad": "Mendoza", "provincia": "Mendoza" },
+    "direccion": { "calle": "Italia", "numero": 410, "departamento": "8","ciudad": "Mendoza", "provincia": "Mendoza" },
     "correoElectronico": "ana.fernandez@hospital.com",
     "contrasenia": "ana123",
     "fechaNacimiento": "1992-08-25",
     "legajo": "P005",
     "matricula": "M-98765",
-    "especialidad": "OFTALMOLOGIA",
+    "especialidad": "PSIQUIATRA",
     "agenda": []
   }
 ]
