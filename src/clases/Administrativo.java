@@ -30,6 +30,10 @@ public class Administrativo extends Empleado {
     public void setSector(String sector) {
         this.sector = sector;
     }
+    @Override
+    public String getTipo() {
+        return "Administrativo";
+    }
 
     @Override
     public String toString() {
