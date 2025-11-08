@@ -35,4 +35,6 @@ public class Administrativo extends Empleado {
     public String toString() {
         return super.toString() + " | Sector: " + sector;
     }
+
+    //agregar sacar y eliminar turno
 }
