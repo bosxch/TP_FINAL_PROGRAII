@@ -26,6 +26,13 @@ public class GestionUsuarios {
         this.usuarios.add(usuario);
     }
 
+    //CARGAR PACIENTES DESDE ARCHIVO JSON
+
+    public void cargarPacienteDesdeJson(String rutaArchivo)
+    {
+        
+    }
+
 
     //Login centralizado: devuelve el usuario correspondiente según su tipo
     public Persona login(String email, String contrasenia) {
@@ -38,18 +45,4 @@ public class GestionUsuarios {
         return null; // no encontrado o contraseña incorrecta
     }
 
-
-     //Listado específico de profesionales por especialidad
-
-    public List<Profesional> listarProfesionales(String especialidad) {
-        List<Profesional> listaProfesionales = new ArrayList<>();
-        for (Persona usuario : usuarios) {
-            if (usuario instanceof Profesional prof) {
-                if (prof.getEspecialidad().equals(especialidad)) {
-                    listaProfesionales.add(prof);
-                }
-            }
-        }
-        return listaProfesionales;
-    }
 }
