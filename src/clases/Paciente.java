@@ -1,12 +1,15 @@
 package clases;
 
 
+import enums.Especialidad;
 import enums.ObraSocial;
 import interfaces.IConsultarHistoriaClinica;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+
 
 public class Paciente extends Persona implements IConsultarHistoriaClinica {
 
@@ -18,14 +21,16 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         super(dni, nombre, apellido, nacionalidad, direccion, correoElectronico, contrasenia, fechaNacimiento);
         this.nroAfiliado = nroAfiliado;
         this.obraSocial = obraSocial;
-        // Se inicializa la Historia Clinica al crear el Paciente, usando el DNI como ID temporal
         this.historiaClinica = new HistoriaClinica("HC-" + dni, dni);
+
     }
 
     public Paciente() {
         super();
         this.historiaClinica = new HistoriaClinica("HC-TEMP", "TEMP");
     }
+
+    //GETTERS Y SETTERS
 
     public String getNroAfiliado() {
         return nroAfiliado;
@@ -42,7 +47,6 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     public void setObraSocial(ObraSocial obraSocial) {
         this.obraSocial = obraSocial;
     }
-
     public HistoriaClinica getHistoriaClinica() {
         return historiaClinica;
     }
@@ -51,6 +55,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         this.historiaClinica = historiaClinica;
     }
 
+    //METODO PARA CONSULTAR HISTORIAL DE TURNOS
     @Override
     public List<Turno> consultarHistorialTurnos(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
@@ -59,6 +64,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         return new ArrayList<>();
     }
 
+    //METODO PARA CONSULTAR RECETAS
     public List<Receta> consultarRecetas(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
             return historiaClinica.getRecetasEmitidas();
@@ -66,12 +72,80 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         return new ArrayList<>();
     }
 
-    //agregar sacar y eliminar turno
+    //METODO PARA SACAR TURNO
+    public void sacarTurno(List<Profesional> profesionales)
+    {
+        Scanner scanner = new Scanner(System.in);
 
-    @Override
-    public String toString() {
-        return super.toString() +
-                " | Afiliado: " + nroAfiliado +
-                " | Obra Social: " + obraSocial;
+        System.out.println("ESPECIALIDADES:");
+        int nro = 1;
+        for (Especialidad e : Especialidad.values())
+        {
+            System.out.println(nro + " - " + e);
+            nro++;
+        }
+        System.out.println("Seleccione la especialidad (ingrese el numero)");
+        int eleccion = scanner.nextInt();
+        scanner.nextLine();
+
+        if(eleccion < 1 || eleccion > Especialidad.values().length)
+        {
+            System.out.println("La opcion ingresada es invalida");
+            return;
+        }
+        Especialidad especialidadElegida = Especialidad.values()[eleccion - 1];
+
+        List<Profesional> disponibles = new ArrayList<>();
+        for(Profesional p : profesionales)
+        {
+            if (p.getEspecialidad() == especialidadElegida)
+            {
+                disponibles.add(p);
+            }
+        }
+
+        if(disponibles.isEmpty())
+        {
+            System.out.println("No hay profesionales disponibles en la especialidad ingresada.");
+            return;
+        }
+
+        System.out.println("PROFESIONALES DISPONIBLES EN: " + especialidadElegida);
+        for(int j=0;j< disponibles.size(); j++)
+        {
+            Profesional p = disponibles.get(j);
+            System.out.println((j+1) + " - Doc. " + p.getApellido() + " - " + p.getNombre());
+        }
+        System.out.println("Seleccione el profesional (ingrese el numero)");
+        int profElegido = scanner.nextInt();
+        scanner.nextLine();
+
+        if(profElegido < 1 || profElegido > disponibles.size())
+        {
+            System.out.println("Profesion invalido.");
+            return;
+        }
+
+        Profesional profesionalSeleccionado = disponibles.get(profElegido - 1);
+
+        System.out.println("TURNOS DISPONIBLES CON DR. " + profesionalSeleccionado.getApellido() + profesionalSeleccionado.getNombre());
+        int turnosDisponibles = profesionalSeleccionado.mostrarDisponibilidad();
+
+        System.out.println("Seleccione el turno (ingrese el nro)");
+        int turnoElegido = scanner.nextInt();
+        scanner.nextLine();
+
+        if (turnoElegido < 1 || turnoElegido > turnosDisponibles) {
+            System.out.println("Turno inválido.");
+            return;
+        }
+
+        Turno turnoSeleccionado = profesionalSeleccionado.getTurnoDisponiblePorIndice(turnoElegido - 1);
+
+        turnoSeleccionado.setIdPaciente(this.getDni());
+        historiaClinica.agregarTurno(turnoSeleccionado);
+
+        System.out.println("TURNO RESERVADO: " + turnoSeleccionado.getDia() + " - " + turnoSeleccionado.getHora() + " Profesional: Dr. " + profesionalSeleccionado.getApellido());
+
     }
 }

@@ -69,4 +69,8 @@ public class Turno {
                 ", hora=" + hora +
                 '}';
     }
+
+    public boolean estaDisponible() {
+        return idPaciente == null;
+    }
 }
