@@ -11,5 +11,5 @@ public interface IConsultarHistoriaClinica {
 
     List<Turno> consultarHistorialTurnos(String dniPaciente);
     List<Receta> consultarRecetas(String dniPaciente);
-    List<Antecedentes> consultarAntecedentes(String dniPaciente);
+
 }
