@@ -1,15 +1,5 @@
 [
-  {
-    "dni": "40000001",
-    "nombre": "Lucía",
-    "apellido": "Gómez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "San Martín",
-      "numero": 1234,
-      "ciudad": "Buenos Aires",
-      "provincia": "Buenos Aires"
-    },
+
     "correoElectronico": "lucia.gomez@example.com",
     "contrasenia": "lucia123",
     "fechaNacimiento": "1990-05-14",
@@ -94,83 +84,5 @@
       "recetasEmitidas": [],
       "antecedentesMedicos": []
     }
-  },
-  {
-    "dni": "40000005",
-    "nombre": "Camila",
-    "apellido": "Vega",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Mitre", "numero": 333, "ciudad": "La Plata", "provincia": "Buenos Aires" },
-    "correoElectronico": "camila.vega@example.com",
-    "contrasenia": "camivega",
-    "fechaNacimiento": "1992-07-01",
-    "nroAfiliado": "OSDE9988",
-    "obraSocial": "OSDE",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000005", "idPaciente": "40000005", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
-  },
-  {
-    "dni": "40000006",
-    "nombre": "Sofía",
-    "apellido": "Luna",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Sarmiento", "numero": 1022, "ciudad": "Salta", "provincia": "Salta" },
-    "correoElectronico": "sofia.luna@example.com",
-    "contrasenia": "sof123",
-    "fechaNacimiento": "1998-10-10",
-    "nroAfiliado": "IOMA111",
-    "obraSocial": "IOMA",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000006", "idPaciente": "40000006", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
-  },
-  {
-    "dni": "40000007",
-    "nombre": "Ramiro",
-    "apellido": "Ortiz",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "España", "numero": 654, "ciudad": "Neuquén", "provincia": "Neuquén" },
-    "correoElectronico": "ramiro.ortiz@example.com",
-    "contrasenia": "ramiortiz",
-    "fechaNacimiento": "1991-01-21",
-    "nroAfiliado": "OSDE9900",
-    "obraSocial": "OSDE",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000007", "idPaciente": "40000007", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
-  },
-  {
-    "dni": "40000008",
-    "nombre": "Agustina",
-    "apellido": "Blanco",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Catamarca", "numero": 87, "ciudad": "Tucumán", "provincia": "Tucumán" },
-    "correoElectronico": "agus.blanco@example.com",
-    "contrasenia": "agustina22",
-    "fechaNacimiento": "1999-03-02",
-    "nroAfiliado": "GALENO555",
-    "obraSocial": "GALENO",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000008", "idPaciente": "40000008", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
-  },
-  {
-    "dni": "40000009",
-    "nombre": "Lautaro",
-    "apellido": "Morales",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Alem", "numero": 550, "ciudad": "Mar del Plata", "provincia": "Buenos Aires" },
-    "correoElectronico": "lautaro.morales@example.com",
-    "contrasenia": "lauti123",
-    "fechaNacimiento": "1996-09-29",
-    "nroAfiliado": "SWISS0909",
-    "obraSocial": "SWISS_MEDICAL",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000009", "idPaciente": "40000009", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
-  },
-  {
-    "dni": "40000010",
-    "nombre": "Carolina",
-    "apellido": "Mendoza",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Italia", "numero": 300, "ciudad": "Bahía Blanca", "provincia": "Buenos Aires" },
-    "correoElectronico": "caro.mendoza@example.com",
-    "contrasenia": "caro456",
-    "fechaNacimiento": "1989-12-11",
-    "nroAfiliado": "OSDE8888",
-    "obraSocial": "OSDE",
-    "historiaClinica": { "idHistoriaClinica": "HC-40000010", "idPaciente": "40000010", "historialTurnos": [], "recetasEmitidas": [], "antecedentesMedicos": [] }
   }
 ]

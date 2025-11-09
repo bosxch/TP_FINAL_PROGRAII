@@ -10,9 +10,9 @@ import org.json.JSONTokener;
 
 public class JSONUtiles {
 
-    public static void grabar(JSONArray array) {
+    public static void grabar(JSONArray array, String archivo) {
         try {
-            FileWriter file = new FileWriter("");
+            FileWriter file = new FileWriter(archivo);
             file.write(array.toString());
             file.flush();
             file.close();
@@ -33,4 +33,5 @@ public class JSONUtiles {
         }
         return tokener;
     }
+
 }
