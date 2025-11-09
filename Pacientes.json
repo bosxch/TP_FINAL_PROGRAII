@@ -1,5 +1,16 @@
 [
-
+  {
+    "dni": "40000001",
+    "nombre": "Lucía",
+    "apellido": "Gómez",
+    "nacionalidad": "Argentina",
+    "direccion": {
+      "calle": "San Martín",
+      "numero": 1234,
+      "departamento": "1",
+      "ciudad": "Buenos Aires",
+      "provincia": "Buenos Aires"
+    },
     "correoElectronico": "lucia.gomez@example.com",
     "contrasenia": "lucia123",
     "fechaNacimiento": "1990-05-14",
@@ -21,6 +32,7 @@
     "direccion": {
       "calle": "Belgrano",
       "numero": 221,
+      "departamento": "3",
       "ciudad": "Rosario",
       "provincia": "Santa Fe"
     },
@@ -45,6 +57,7 @@
     "direccion": {
       "calle": "Corrientes",
       "numero": 1200,
+      "departamento": "4",
       "ciudad": "Córdoba",
       "provincia": "Córdoba"
     },
@@ -69,6 +82,7 @@
     "direccion": {
       "calle": "Rivadavia",
       "numero": 532,
+      "departamento": "6",
       "ciudad": "Mendoza",
       "provincia": "Mendoza"
     },
