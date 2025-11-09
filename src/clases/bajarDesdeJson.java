@@ -111,6 +111,7 @@ public class bajarDesdeJson {
                 paciente.setHistoriaClinica(historiaClinica);
                 pacientes.add(paciente);
             }
+            usuarios.addAll(pacientes);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
@@ -197,6 +198,7 @@ public class bajarDesdeJson {
                     empleados.add(administrativo);
                 }
             }
+            usuarios.addAll(empleados);
 
         } catch (JSONException e) {
             throw new RuntimeException(e);
