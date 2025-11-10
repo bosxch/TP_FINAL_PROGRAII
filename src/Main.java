@@ -1,31 +1,29 @@
+import ManejoJSON.GestorEmpleadosJson;
+import ManejoJSON.GestorPacientesJson;
 import clases.Empleado;
-import clases.Paciente;
 import clases.Persona;
 import clases.Profesional;
-import clases.bajarDesdeJson;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args)
     {
-        List<Persona> usuarios = new ArrayList<>();
-        List<Paciente> pacientes = new ArrayList<>();
-        List<Empleado> empleados = new ArrayList<>();
-        List<Profesional> profesionales = new ArrayList<>();
+        GestorEmpleadosJson gestor = new GestorEmpleadosJson("empleados.json");
+        gestor.cargarEmpleadoDesdeJson();
 
-        // --- Creamos el manejador de carga ---
-        bajarDesdeJson manejador = new bajarDesdeJson(usuarios, pacientes, empleados, profesionales);
 
-        // --- Cargar desde archivos JSON ---
-        manejador.cargarPacienteDesdeJson("pacientes.json");
-        manejador.cargarEmpleadoDesdeJson("empleados.json");
+        gestor.agregarEmpleado("Profesional", "101", "Juan", "Pérez", "Argentina",
+                "San Martín", 123, "A", "Buenos Aires", "Buenos Aires",
+                "juan@correo.com", "1234", "1985-05-10",
+                "E001", "M123", "CARDIOLOGIA", null);
 
-        // --- Mostrar resultados ---
-        manejador.mostrarPacientes();
-        manejador.mostrarEmpleados();
+        gestor.listarEmpleados();
 
-        System.out.println("\n=== FIN DE LA PRUEBA ===");
+        GestorPacientesJson gestor1 = new GestorPacientesJson("pacientes.json");
+        gestor1.cargarPacienteDesdeJson();
+        gestor1.listarPacientes();
+
+
+
+
     }
 }

@@ -1,0 +1,268 @@
+package ManejoJSON;
+import clases.*;
+import enums.ObraSocial;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+
+public class GestorPacientesJson {
+
+    private String archivoJson;
+    private JSONArray pacientes;
+    private List<Persona> usuarios;
+    private List<Paciente> listaPacientes;
+
+    public GestorPacientesJson(String archivoJson) {
+        this.archivoJson = archivoJson;
+        this.usuarios = new ArrayList<>();
+        this.listaPacientes = new ArrayList<>();
+
+        try {
+            if (Files.exists(Paths.get(archivoJson))) {
+                String content = new String(Files.readAllBytes(Paths.get(archivoJson)));
+                this.pacientes = new JSONArray(content);
+            } else {
+                this.pacientes = new JSONArray();
+                guardar();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    //CRUD JSON
+
+    // Agregar paciente
+    public void agregarPaciente(String dni, String nombre, String apellido, String nacionalidad,
+                                String calle, int numero, String depto, String ciudad, String provincia,
+                                String correo, String contrasenia, String fechaNacimiento,
+                                String nroAfiliado, String obraSocial) {
+        try {
+            JSONObject paciente = new JSONObject();
+            paciente.put("dni", dni);
+            paciente.put("nombre", nombre);
+            paciente.put("apellido", apellido);
+            paciente.put("nacionalidad", nacionalidad);
+
+            JSONObject direccion = new JSONObject();
+            direccion.put("calle", calle);
+            direccion.put("numero", numero);
+            direccion.put("departamento", depto);
+            direccion.put("ciudad", ciudad);
+            direccion.put("provincia", provincia);
+
+            paciente.put("direccion", direccion);
+
+            paciente.put("correoElectronico", correo);
+            paciente.put("contrasenia", contrasenia);
+            paciente.put("fechaNacimiento", fechaNacimiento);
+            paciente.put("nroAfiliado", nroAfiliado);
+            paciente.put("obraSocial", obraSocial);
+
+            JSONObject historiaClinica = new JSONObject();
+            historiaClinica.put("idHistoriaClinica", "HC-" + dni);
+            historiaClinica.put("idPaciente", dni);
+            historiaClinica.put("historialTurnos", new JSONArray());
+            historiaClinica.put("recetasEmitidas", new JSONArray());
+            historiaClinica.put("antecedentesMedicos", new JSONArray());
+            paciente.put("historiaClinica", historiaClinica);
+
+            pacientes.put(paciente);
+            guardar();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Modificar paciente por DNI
+    public void modificarPaciente(String dni, String nuevoNombre, String nuevoApellido, String nuevaNacionalidad,
+                                  String calle, int numero, String depto, String ciudad, String provincia,
+                                  String correo, String contrasenia, String fechaNacimiento,
+                                  String nroAfiliado, String obraSocial) {
+        try {
+            for (int i = 0; i < pacientes.length(); i++) {
+                JSONObject paciente = pacientes.getJSONObject(i);
+                if (paciente.getString("dni").equals(dni)) {
+                    paciente.put("nombre", nuevoNombre);
+                    paciente.put("apellido", nuevoApellido);
+                    paciente.put("nacionalidad", nuevaNacionalidad);
+                    paciente.put("correoElectronico", correo);
+                    paciente.put("contrasenia", contrasenia);
+                    paciente.put("fechaNacimiento", fechaNacimiento);
+                    paciente.put("nroAfiliado", nroAfiliado);
+                    paciente.put("obraSocial", obraSocial);
+
+                    JSONObject direccion = paciente.getJSONObject("direccion");
+                    direccion.put("calle", calle);
+                    direccion.put("numero", numero);
+                    direccion.put("departamento", depto);
+                    direccion.put("ciudad", ciudad);
+                    direccion.put("provincia", provincia);
+                    break;
+                }
+            }
+            guardar();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Eliminar paciente por DNI
+    public void eliminarPaciente(String dni) {
+        try {
+            for (int i = 0; i < pacientes.length(); i++) {
+                JSONObject paciente = pacientes.getJSONObject(i);
+                if (paciente.getString("dni").equals(dni)) {
+                    pacientes.remove(i);
+                    break;
+                }
+            }
+            guardar();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Listar pacientes
+    public void listarPacientes() {
+        try {
+            for (int i = 0; i < pacientes.length(); i++) {
+                System.out.println(pacientes.getJSONObject(i).toString(4));
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Obtener paciente por DNI
+    public JSONObject obtenerPaciente(String dni) {
+        try {
+            for (int i = 0; i < pacientes.length(); i++) {
+                JSONObject paciente = pacientes.getJSONObject(i);
+                if (paciente.getString("dni").equals(dni)) {
+                    return paciente;
+                }
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        return null;
+    }
+
+    // Guardar cambios en el archivo JSON
+    private void guardar() {
+        try {
+            Files.write(Paths.get(archivoJson),
+                    pacientes.toString(4).getBytes(),
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //BAJAR DE JSON A OBJETOS
+
+    public void cargarPacienteDesdeJson()
+    {
+        try {
+            listaPacientes = new ArrayList<>();
+
+            for (int i = 0; i < pacientes.length(); i++)
+            {
+                JSONObject obj = pacientes.getJSONObject(i);
+
+                JSONObject dir = obj.getJSONObject("direccion");
+                Direccion direccion = new Direccion(
+                        dir.getString("calle"),
+                        dir.getInt("numero"),
+                        dir.getString("departamento"),
+                        dir.getString("ciudad"),
+                        dir.getString("provincia")
+
+                );
+
+                JSONObject hcObj = obj.getJSONObject("historiaClinica");
+
+                // --- Historial de turnos ---
+                List<Turno> historialTurnos = new ArrayList<>();
+                JSONArray arrTurnos = hcObj.getJSONArray("historialTurnos");
+                for (int j = 0; j < arrTurnos.length(); j++) {
+                    JSONObject tObj = arrTurnos.getJSONObject(j);
+                    Turno turno = new Turno(
+                            tObj.getString("idTurno"),
+                            tObj.optString("idPaciente", null),
+                            tObj.getString("idProfesional"),
+                            LocalDate.parse(tObj.getString("dia")),
+                            LocalTime.parse(tObj.getString("hora"))
+                    );
+                    historialTurnos.add(turno);
+                }
+
+                // --- Recetas emitidas ---
+                List<Receta> recetasEmitidas = new ArrayList<>();
+                JSONArray recetasArray = hcObj.getJSONArray("recetasEmitidas");
+                for (int k = 0; k < recetasArray.length(); k++) {
+                    JSONObject recetaObj = recetasArray.getJSONObject(k);
+                    Receta receta = new Receta(
+                            recetaObj.getString("idReceta"),
+                            recetaObj.getString("diagnostico"),
+                            recetaObj.getString("medicamento"),
+                            recetaObj.getString("dosis")
+                    );
+                    recetasEmitidas.add(receta);
+                }
+
+                // --- Antecedentes médicos ---
+                List<String> antecedentes = new ArrayList<>();
+                JSONArray arrAntecedentes = hcObj.getJSONArray("antecedentesMedicos");
+                for (int j = 0; j < arrAntecedentes.length(); j++) {
+                    antecedentes.add(arrAntecedentes.getString(j));
+                }
+
+                // Crear la historia clínica con sus listas
+                HistoriaClinica historiaClinica = new HistoriaClinica(
+                        hcObj.getString("idHistoriaClinica"),
+                        hcObj.getString("idPaciente")
+                );
+
+                historiaClinica.setHistorialTurnos(historialTurnos);
+                historiaClinica.setRecetasEmitidas(recetasEmitidas);
+                historiaClinica.setAntecedentesMedicos(antecedentes);
+
+                Paciente paciente = new Paciente(
+                        obj.getString("dni"),
+                        obj.getString("nombre"),
+                        obj.getString("apellido"),
+                        obj.getString("nacionalidad"),
+                        direccion,
+                        obj.getString("correoElectronico"),
+                        obj.getString("contrasenia"),
+                        LocalDate.parse(obj.getString("fechaNacimiento")),
+                        obj.getString("nroAfiliado"),
+                        ObraSocial.valueOf(obj.getString("obraSocial").trim().toUpperCase())
+                );
+
+                paciente.setHistoriaClinica(historiaClinica);
+                listaPacientes.add(paciente);
+            }
+            if (usuarios == null) {
+                usuarios = new ArrayList<>();
+            }
+            usuarios.addAll(listaPacientes);
+
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+}
