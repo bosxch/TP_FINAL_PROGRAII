@@ -1,102 +1,119 @@
 [
-  {
-    "dni": "40000001",
-    "nombre": "Lucía",
-    "apellido": "Gómez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "San Martín",
-      "numero": 1234,
-      "departamento": "1",
-      "ciudad": "Buenos Aires",
-      "provincia": "Buenos Aires"
+    {
+        "historiaClinica": {
+            "idPaciente": "40000001",
+            "recetasEmitidas": [{
+                "diagnostico": "Gripe A",
+                "dosis": "Cada 8 horas por 5 dias",
+                "idReceta": "R-001-2025",
+                "medicamento": "Ibuprofeno 600mg",
+                "fechaEmision": "2025-11-01"
+            }],
+            "antecedentesMedicos": [{
+                "descripcion": "Alergia a la penicilina",
+                "tipoAntecedente": "Alergia",
+                "fechaRegistro": "2025-01-20",
+                "idRegistro": "A-001-2025"
+            }],
+            "historialTurnos": [{
+                "idPaciente": "40000001",
+                "idProfesional": "20000001",
+                "hora": "10:30",
+                "dia": "2025-11-15",
+                "idTurno": "T-001-2025"
+            }],
+            "idHistoriaClinica": "HC-40000001"
+        },
+        "fechaNacimiento": "1990-05-14",
+        "obraSocial": "OSDE",
+        "apellido": "Gomez",
+        "direccion": {
+            "numero": 1234,
+            "ciudad": "Buenos Aires",
+            "calle": "San Martin",
+            "departamento": "1",
+            "provincia": "Buenos Aires"
+        },
+        "contrasenia": "lucia123",
+        "nroAfiliado": "OSDE12345",
+        "nombre": "Lucia",
+        "correoElectronico": "lucia.gomez@example.com",
+        "dni": "40000001",
+        "nacionalidad": "Argentina"
     },
-    "correoElectronico": "lucia.gomez@example.com",
-    "contrasenia": "lucia123",
-    "fechaNacimiento": "1990-05-14",
-    "nroAfiliado": "OSDE12345",
-    "obraSocial": "OSDE",
-    "historiaClinica": {
-      "idHistoriaClinica": "HC-40000001",
-      "idPaciente": "40000001",
-      "historialTurnos": [],
-      "recetasEmitidas": [],
-      "antecedentesMedicos": []
-    }
-  },
-  {
-    "dni": "40000002",
-    "nombre": "Martín",
-    "apellido": "Pérez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Belgrano",
-      "numero": 221,
-      "departamento": "3",
-      "ciudad": "Rosario",
-      "provincia": "Santa Fe"
+    {
+        "historiaClinica": {
+            "idPaciente": "40000002",
+            "recetasEmitidas": [],
+            "antecedentesMedicos": [],
+            "historialTurnos": [],
+            "idHistoriaClinica": "HC-40000002"
+        },
+        "fechaNacimiento": "1988-11-22",
+        "obraSocial": "SWISS_MEDICAL",
+        "apellido": "Perez",
+        "direccion": {
+            "numero": 221,
+            "ciudad": "Rosario",
+            "calle": "Belgrano",
+            "departamento": "3",
+            "provincia": "Santa Fe"
+        },
+        "contrasenia": "martin456",
+        "nroAfiliado": "SWISS23456",
+        "nombre": "Martin",
+        "correoElectronico": "martin.perez@example.com",
+        "dni": "40000002",
+        "nacionalidad": "Argentina"
     },
-    "correoElectronico": "martin.perez@example.com",
-    "contrasenia": "martin456",
-    "fechaNacimiento": "1988-11-22",
-    "nroAfiliado": "SWISS23456",
-    "obraSocial": "SWISS_MEDICAL",
-    "historiaClinica": {
-      "idHistoriaClinica": "HC-40000002",
-      "idPaciente": "40000002",
-      "historialTurnos": [],
-      "recetasEmitidas": [],
-      "antecedentesMedicos": []
-    }
-  },
-  {
-    "dni": "40000003",
-    "nombre": "Valentina",
-    "apellido": "Rodríguez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Corrientes",
-      "numero": 1200,
-      "departamento": "4",
-      "ciudad": "Córdoba",
-      "provincia": "Córdoba"
+    {
+        "historiaClinica": {
+            "idPaciente": "40000003",
+            "recetasEmitidas": [],
+            "antecedentesMedicos": [],
+            "historialTurnos": [],
+            "idHistoriaClinica": "HC-40000003"
+        },
+        "fechaNacimiento": "1995-02-03",
+        "obraSocial": "GALENO",
+        "apellido": "Rodriguez",
+        "direccion": {
+            "numero": 1200,
+            "ciudad": "Cordoba",
+            "calle": "Corrientes",
+            "departamento": "4",
+            "provincia": "Cordoba"
+        },
+        "contrasenia": "vale789",
+        "nroAfiliado": "GALENO9876",
+        "nombre": "Valentina",
+        "correoElectronico": "valen.rodriguez@example.com",
+        "dni": "40000003",
+        "nacionalidad": "Argentina"
     },
-    "correoElectronico": "valen.rodriguez@example.com",
-    "contrasenia": "vale789",
-    "fechaNacimiento": "1995-02-03",
-    "nroAfiliado": "GALENO9876",
-    "obraSocial": "GALENO",
-    "historiaClinica": {
-      "idHistoriaClinica": "HC-40000003",
-      "idPaciente": "40000003",
-      "historialTurnos": [],
-      "recetasEmitidas": [],
-      "antecedentesMedicos": []
+    {
+        "historiaClinica": {
+            "idPaciente": "40000004",
+            "recetasEmitidas": [],
+            "antecedentesMedicos": [],
+            "historialTurnos": [],
+            "idHistoriaClinica": "HC-40000004"
+        },
+        "fechaNacimiento": "1984-09-18",
+        "obraSocial": "IOMA",
+        "apellido": "Suarez",
+        "direccion": {
+            "numero": 532,
+            "ciudad": "Mendoza",
+            "calle": "Rivadavia",
+            "departamento": "6",
+            "provincia": "Mendoza"
+        },
+        "contrasenia": "dieguito",
+        "nroAfiliado": "IOMA5566",
+        "nombre": "Diego",
+        "correoElectronico": "diego.suarez@example.com",
+        "dni": "40000004",
+        "nacionalidad": "Argentina"
     }
-  },
-  {
-    "dni": "40000004",
-    "nombre": "Diego",
-    "apellido": "Suárez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Rivadavia",
-      "numero": 532,
-      "departamento": "6",
-      "ciudad": "Mendoza",
-      "provincia": "Mendoza"
-    },
-    "correoElectronico": "diego.suarez@example.com",
-    "contrasenia": "dieguito",
-    "fechaNacimiento": "1984-09-18",
-    "nroAfiliado": "IOMA5566",
-    "obraSocial": "IOMA",
-    "historiaClinica": {
-      "idHistoriaClinica": "HC-40000004",
-      "idPaciente": "40000004",
-      "historialTurnos": [],
-      "recetasEmitidas": [],
-      "antecedentesMedicos": []
-    }
-  }
 ]

@@ -36,6 +36,11 @@ public class Antecedentes {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public void setFechaRegistro(LocalDate fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+    }
+
     public void setTipoAntecedente(String tipoAntecedente) {
         this.tipoAntecedente = tipoAntecedente;
     }
@@ -44,4 +49,6 @@ public class Antecedentes {
     public String toString() {
         return "Antecedente [Tipo=" + tipoAntecedente + ", Descripcion=" + descripcion + ", Fecha=" + fechaRegistro + "]";
     }
+
+
 }

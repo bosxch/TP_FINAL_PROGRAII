@@ -12,8 +12,7 @@ public class HistoriaClinica<T> {
     private List<Turno> historialTurnos;
     private List<Receta> recetasEmitidas;
     private List<Antecedentes> antecedentesMedicos;
-    private LocalDateTime fechaCreacion;
-    private LocalDateTime ultimaActualizacion ;
+
 
     public HistoriaClinica(String idHistoriaClinica, T idPaciente) {
         this.idHistoriaClinica = idHistoriaClinica;
@@ -21,25 +20,24 @@ public class HistoriaClinica<T> {
         this.historialTurnos = new ArrayList<>();
         this.recetasEmitidas = new ArrayList<>();
         this.antecedentesMedicos = new ArrayList<>();
-        this.fechaCreacion = LocalDateTime.now();
-        this.ultimaActualizacion = LocalDateTime.now();
+
     }
 
 
     public void agregarTurno(Turno turno) {
 
         this.historialTurnos.add(turno);
-        this.ultimaActualizacion = LocalDateTime.now(); // actualiza la fecha de modificacion
+
     }
 
     public void agregarReceta(Receta receta) {
         this.recetasEmitidas.add(receta);
-        this.ultimaActualizacion = LocalDateTime.now();//actualiza feche de mod
+
     }
 
     public void agregarAntecedente(Antecedentes antecedente) {
         this.antecedentesMedicos.add(antecedente);
-        this.ultimaActualizacion = LocalDateTime.now(); //act fecha
+
     }
 
     public String getIdHistoriaClinica() {
@@ -62,9 +60,7 @@ public class HistoriaClinica<T> {
         return idPaciente;
     }
 
-    public LocalDateTime getUltimaActualizacion() {
-        return ultimaActualizacion;
-    }
+
 
     public void setIdHistoriaClinica(String idHistoriaClinica) {
         this.idHistoriaClinica = idHistoriaClinica;
@@ -86,17 +82,8 @@ public class HistoriaClinica<T> {
         this.antecedentesMedicos = antecedentesMedicos;
     }
 
-    public LocalDateTime getFechaCreacion() {
-        return fechaCreacion;
-    }
 
-    public void setFechaCreacion(LocalDateTime fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
 
-    public void setUltimaActualizacion(LocalDateTime ultimaActualizacion) {
-        this.ultimaActualizacion = ultimaActualizacion;
-    }
 
     @Override
     public String toString() {
@@ -106,8 +93,6 @@ public class HistoriaClinica<T> {
                 ", historialTurnos=" + historialTurnos +
                 ", recetasEmitidas=" + recetasEmitidas +
                 ", antecedentesMedicos=" + antecedentesMedicos +
-                ", fechaCreacion=" + fechaCreacion +
-                ", ultimaActualizacion=" + ultimaActualizacion +
                 '}';
     }
 }

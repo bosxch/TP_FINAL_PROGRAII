@@ -41,6 +41,11 @@ public class Receta {
     public void setMedicamento(String medicamento) {
         this.medicamento = medicamento;
     }
+
+    public void setFechaEmision(LocalDate fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
     public void setDosis(String dosis) {
         this.dosis = dosis;
     }
@@ -49,4 +54,6 @@ public class Receta {
     public String toString() {
         return "Receta [Medicamento=" + medicamento + ", Dosis=" + dosis + ", Fecha=" + fechaEmision + "]";
     }
+
+
 }

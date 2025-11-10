@@ -219,15 +219,16 @@ public class GestorPacientesJson {
 
                 // --- Historial de turnos ---
                 List<Turno> historialTurnos = new ArrayList<>();
-                JSONArray arrTurnos = hcObj.getJSONArray("historialTurnos");
-                for (int j = 0; j < arrTurnos.length(); j++) {
-                    JSONObject tObj = arrTurnos.getJSONObject(j);
+                JSONArray turnosArray = hcObj.getJSONArray("historialTurnos");
+                for (int k = 0; k < turnosArray.length(); k++) {
+                    // CLAVE: Obtener el objeto JSON individual
+                    JSONObject turnoObj = turnosArray.getJSONObject(k);
                     Turno turno = new Turno(
-                            tObj.getString("idTurno"),
-                            tObj.optString("idPaciente", null),
-                            tObj.getString("idProfesional"),
-                            LocalDate.parse(tObj.getString("dia")),
-                            LocalTime.parse(tObj.getString("hora"))
+                            turnoObj.getString("idTurno"),
+                            turnoObj.getString("idPaciente"),
+                            turnoObj.getString("idProfesional"),
+                            LocalDate.parse(turnoObj.getString("dia")),
+                            LocalTime.parse(turnoObj.getString("hora"))
                     );
                     historialTurnos.add(turno);
                 }
@@ -236,6 +237,7 @@ public class GestorPacientesJson {
                 List<Receta> recetasEmitidas = new ArrayList<>();
                 JSONArray recetasArray = hcObj.getJSONArray("recetasEmitidas");
                 for (int k = 0; k < recetasArray.length(); k++) {
+                    // CLAVE: Obtener el objeto JSON individual
                     JSONObject recetaObj = recetasArray.getJSONObject(k);
                     Receta receta = new Receta(
                             recetaObj.getString("idReceta"),
@@ -243,14 +245,27 @@ public class GestorPacientesJson {
                             recetaObj.getString("medicamento"),
                             recetaObj.getString("dosis")
                     );
+                    if (recetaObj.has("fechaEmision")) {
+                        receta.setFechaEmision(LocalDate.parse(recetaObj.getString("fechaEmision")));
+                    }
                     recetasEmitidas.add(receta);
                 }
 
                 // --- Antecedentes médicos ---
-                List<String> antecedentes = new ArrayList<>();
+                List<Antecedentes> antecedentesMedicos = new ArrayList<>();
                 JSONArray arrAntecedentes = hcObj.getJSONArray("antecedentesMedicos");
                 for (int j = 0; j < arrAntecedentes.length(); j++) {
-                    antecedentes.add(arrAntecedentes.getString(j));
+                    // CLAVE: Obtener el objeto JSON individual
+                    JSONObject antObj = arrAntecedentes.getJSONObject(j); // <--- ESTO DEBERÍA SOLUCIONAR EL ERROR
+                    Antecedentes antecedente = new Antecedentes(
+                            antObj.getString("idRegistro"),
+                            antObj.getString("descripcion"),
+                            antObj.getString("tipoAntecedente")
+                    );
+                    if (antObj.has("fechaRegistro")) {
+                        antecedente.setFechaRegistro(LocalDate.parse(antObj.getString("fechaRegistro")));
+                    }
+                    antecedentesMedicos.add(antecedente);
                 }
 
                 // Crear la historia clínica con sus listas
@@ -261,7 +276,7 @@ public class GestorPacientesJson {
 
                 historiaClinica.setHistorialTurnos(historialTurnos);
                 historiaClinica.setRecetasEmitidas(recetasEmitidas);
-                historiaClinica.setAntecedentesMedicos(antecedentes);
+                historiaClinica.setAntecedentesMedicos(antecedentesMedicos);
 
                 Paciente paciente = new Paciente(
                         obj.getString("dni"),
@@ -274,6 +289,7 @@ public class GestorPacientesJson {
                         LocalDate.parse(obj.getString("fechaNacimiento")),
                         obj.getString("nroAfiliado"),
                         ObraSocial.valueOf(obj.getString("obraSocial").trim().toUpperCase())
+
                 );
 
                 paciente.setHistoriaClinica(historiaClinica);

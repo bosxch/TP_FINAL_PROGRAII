@@ -123,19 +123,26 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     }
 
     // METODO PARA MOSTRAR TURNOS
+    // Archivo: clases/Profesional.java
+
+// ...
+
+    // METODO PARA MOSTRAR TURNOS (Corregido para mostrar numeración correcta)
     public int mostrarDisponibilidad() {
         eliminarTurnosPasados();
         actualizarAgendaMensual();
-        int i = 1;
+
+        // Cambia i de contador de bucle a contador de salida
+        int nroTurno = 1;
         int cantidadDisponibles = 0;
 
         boolean hayDisponibles = false;
         for (Turno t : agenda) {
-
             if (t.getIdPaciente() == null && !t.getDia().isBefore(LocalDate.now())) {
-                System.out.println(i + " - " + t.getDia() + " " + t.getHora());
+                System.out.println(nroTurno + " - " + t.getDia() + " " + t.getHora()); // Usa nroTurno aquí
                 hayDisponibles = true;
                 cantidadDisponibles++;
+                nroTurno++; // ¡Incrementa el número de salida!
             }
         }
         if (!hayDisponibles) {
@@ -156,16 +163,25 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     }
 
     //METODO PARA TRAER TURNO POR INDICE
+// METODO PARA TRAER TURNO POR INDICE (CORREGIDO)
     public Turno getTurnoDisponiblePorIndice(int indice) {
-        int contador = 0;
+        // Nota: 'indice' aquí es la posición base 0 (ej: 0, 1, 2)
+        // que viene de 'turnoElegido - 1'.
+
+        int contadorTurnosLibres = 0;
         for (Turno t : agenda) {
+            // 1. Filtramos solo los turnos disponibles y futuros
             if (t.getIdPaciente() == null && !t.getDia().isBefore(LocalDate.now())) {
-                contador++;
-                if (contador == indice) {
+
+                // 2. Si el contador coincide con el índice base 0, retornamos el turno.
+                if (contadorTurnosLibres == indice) {
                     return t;
                 }
+                // 3. Incrementamos el contador para pasar al siguiente turno libre
+                contadorTurnosLibres++;
             }
         }
+        // Si el contador nunca coincide (porque el índice es demasiado grande o la lista estaba vacía)
         return null;
     }
 
@@ -225,43 +241,31 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
 
 
     public void agregarRecetaAHistoria(HistoriaClinica<?> historia, Receta receta, GestorPacientesJson gestorPacientes) {
+        // 1. Agregar la receta a la Historia Clínica en memoria
         historia.agregarReceta(receta);
-        JSONObject pacienteJson = gestorPacientes.obtenerPaciente((String) historia.getIdPaciente());
-        if (pacienteJson != null) {
-            JSONObject historiaJson = null;
-            try {
-                historiaJson = pacienteJson.getJSONObject("historiaClinica");
-                JSONArray recetasJson = historiaJson.getJSONArray("recetasEmitidas");
 
-                JSONObject recetaJson = new JSONObject();
-                recetaJson.put("idReceta", receta.getIdReceta());
-                recetaJson.put("diagnostico", receta.getDiagnostico());
-                recetaJson.put("medicamento", receta.getMedicamento());
-                recetaJson.put("dosis", receta.getDosis());
+        // 2. Obtener el paciente para actualizar su objeto en la lista
+        Paciente pacienteAActualizar = gestorPacientes.buscarPacientePorDni((String) historia.getIdPaciente());
 
-                recetasJson.put(recetaJson);
-
-
-                gestorPacientes.guardarPacientes();
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+        if (pacienteAActualizar != null) {
+            // 3. Persistir el objeto Paciente completo al archivo JSON
+            // El metodo actualizarPaciente internamente ya actualiza la lista en memoria del gestor
+            gestorPacientes.actualizarPaciente(pacienteAActualizar);
+            gestorPacientes.guardarPacientes(); // <--- ESTE ES EL PASO CRÍTICO: GUARDA EN EL ARCHIVO FÍSICO
         }
     }
 
     public void agregarAntecedenteAHistoria(HistoriaClinica<?> historia, Antecedentes antecedente, GestorPacientesJson gestorPacientes) {
+        // 1. Agregar el antecedente a la Historia Clínica en memoria
         historia.agregarAntecedente(antecedente);
-        try {
-            JSONObject pacienteJson = gestorPacientes.obtenerPaciente((String) historia.getIdPaciente());
-            if (pacienteJson != null) {
-                JSONObject historiaJson = null;
-                historiaJson = pacienteJson.getJSONObject("historiaClinica");
-                JSONArray antecedentesJson = historiaJson.getJSONArray("antecedentesMedicos");
-                antecedentesJson.put(antecedente.getDescripcion()); // o antecedente.toString() si querés más info
-                gestorPacientes.guardarPacientes();
-            }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+
+        // 2. Obtener el paciente para actualizar su objeto en la lista
+        Paciente pacienteAActualizar = gestorPacientes.buscarPacientePorDni((String) historia.getIdPaciente());
+
+        if (pacienteAActualizar != null) {
+            // 3. Persistir el objeto Paciente completo al archivo JSON
+            gestorPacientes.actualizarPaciente(pacienteAActualizar);
+            gestorPacientes.guardarPacientes(); // <--- ESTE ES EL PASO CRÍTICO: GUARDA EN EL ARCHIVO FÍSICO
         }
     }
 
