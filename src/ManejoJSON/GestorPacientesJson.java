@@ -194,6 +194,39 @@ public class GestorPacientesJson {
         guardar();
     }
 
+    //SINCRONIZAR CON JSON
+    public void sincronizarPacienteConJson(Paciente paciente) {
+        try {
+            for (int i = 0; i < pacientes.length(); i++) {
+                JSONObject pacObj = pacientes.getJSONObject(i);
+                if (pacObj.getString("dni").equals(paciente.getDni())) {
+
+                    JSONObject hcObj = pacObj.getJSONObject("historiaClinica");
+                    JSONArray nuevosTurnos = new JSONArray();
+
+                    for (Turno t : paciente.getHistoriaClinica().getHistorialTurnos()) {
+                        JSONObject turnoJson = new JSONObject();
+                        turnoJson.put("idTurno", t.getIdTurno());
+                        turnoJson.put("idPaciente", t.getIdPaciente());
+                        turnoJson.put("idProfesional", t.getIdProfesional());
+                        turnoJson.put("dia", t.getDia().toString());
+                        turnoJson.put("hora", t.getHora().toString());
+                        nuevosTurnos.put(turnoJson); // 👈 Esta es la línea correcta
+                    }
+
+                    hcObj.put("historialTurnos", nuevosTurnos);
+                    pacObj.put("historiaClinica", hcObj);
+                    break;
+                }
+            }
+
+            guardar();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     //BAJAR DE JSON A OBJETOS
 
     public void cargarPacienteDesdeJson()

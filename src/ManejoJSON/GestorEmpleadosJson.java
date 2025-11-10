@@ -198,6 +198,37 @@ public class GestorEmpleadosJson {
         guardar();
     }
 
+    //SINCRONIZAR CON JSON
+    public void sincronizarProfesionalConJson(Profesional profesional) {
+        try {
+            for (int i = 0; i < empleados.length(); i++) {
+                JSONObject empleado = empleados.getJSONObject(i);
+                if (empleado.getString("dni").equals(profesional.getDni())) {
+
+                    // Actualizamos la agenda
+                    JSONArray nuevaAgenda = new JSONArray();
+                    for (Turno t : profesional.getAgenda()) {
+                        if (t.getIdPaciente() != null) {
+                            JSONObject turnoJson = new JSONObject();
+                            turnoJson.put("idTurno", t.getIdTurno());
+                            turnoJson.put("idPaciente", t.getIdPaciente());
+                            turnoJson.put("idProfesional", t.getIdProfesional());
+                            turnoJson.put("dia", t.getDia().toString());
+                            turnoJson.put("hora", t.getHora().toString());
+                            nuevaAgenda.put(turnoJson);
+                        }
+                    }
+
+                    empleado.put("agenda", nuevaAgenda);
+                    break;
+                }
+            }
+            guardar();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     //CARGAR EMPLEADOS DESDE ARCHIVO JSON EN OBJETOS
     public void cargarEmpleadoDesdeJson()
     {
@@ -222,7 +253,7 @@ public class GestorEmpleadosJson {
 
                 // --- Si es un profesional ---
                 if (tipo.equalsIgnoreCase("Profesional")) {
-                    List<Turno> agenda = new ArrayList<>();
+                    List<Turno> turnosOcupados  = new ArrayList<>();
                     JSONArray arrAgenda = obj.optJSONArray("agenda");
                     if (arrAgenda != null) {
                         for (int j = 0; j < arrAgenda.length(); j++) {
@@ -234,7 +265,9 @@ public class GestorEmpleadosJson {
                                     LocalDate.parse(tObj.getString("dia")),
                                     LocalTime.parse(tObj.getString("hora"))
                             );
-                            agenda.add(turno);
+                            if (turno.getIdPaciente() != null) { // Solo turnos realmente ocupados
+                                turnosOcupados.add(turno);
+                            }
                         }
                     }
 
@@ -250,13 +283,23 @@ public class GestorEmpleadosJson {
                             LocalDate.parse(obj.getString("fechaNacimiento")),
                             obj.getString("legajo"),
                             obj.getString("matricula"),
-                            Especialidad.valueOf(obj.getString("especialidad").toUpperCase()),
-                            agenda
+                            Especialidad.valueOf(obj.getString("especialidad").toUpperCase())
                     );
+                    // Generar agenda completa de turnos libres
+                    profesional.generarAgenda();
 
+                    // Insertar los turnos ocupados dentro de esa agenda
+                    for (Turno ocupado : turnosOcupados) {
+                        for (Turno libre : profesional.getAgenda()) {
+                            if (libre.getDia().equals(ocupado.getDia()) && libre.getHora().equals(ocupado.getHora())) {
+                                libre.setIdPaciente(ocupado.getIdPaciente());
+                                break;
+                            }
+                        }
+                    }
+                    // Agregar el profesional a las listas
                     listaProfesionales.add(profesional);
                     listaEmpleados.add(profesional);
-
                 }
                 // --- Si es un administrativo ---
                 else if (tipo.equalsIgnoreCase("Administrativo")) {

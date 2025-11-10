@@ -10,7 +10,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale; // Necesario para toUpperCase()
+import java.util.Locale;
 
 
 public class Paciente extends Persona implements IConsultarHistoriaClinica {
@@ -20,15 +20,13 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     private ObraSocial obraSocial;
     private HistoriaClinica historiaClinica;
 
-    // CONSTRUCTOR 1: Completo (11 argumentos)
+    // CONSTRUCTORES
     public Paciente(String dni, String nombre, String apellido, String nacionalidad, Direccion direccion, String correoElectronico, String contrasenia, LocalDate fechaNacimiento, String nroAfiliado, ObraSocial obraSocial, HistoriaClinica historiaClinica) {
         super(dni, nombre, apellido, nacionalidad, direccion, correoElectronico, contrasenia, fechaNacimiento);
         this.nroAfiliado = nroAfiliado;
         this.obraSocial = obraSocial;
         this.historiaClinica = historiaClinica;
     }
-
-    // CONSTRUCTOR 2: Para la carga JSON (10 argumentos) <-- ¡AGREGADO PARA SOLUCIONAR EL ERROR DE COMPILACION!
     public Paciente(String dni, String nombre, String apellido, String nacionalidad, Direccion direccion, String correoElectronico, String contrasenia, LocalDate fechaNacimiento, String nroAfiliado, ObraSocial obraSocial) {
         super(dni, nombre, apellido, nacionalidad, direccion, correoElectronico, contrasenia, fechaNacimiento);
         this.nroAfiliado = nroAfiliado;
@@ -37,14 +35,12 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         this.historiaClinica = new HistoriaClinica("HC-" + dni, dni);
     }
 
-
     public Paciente() {
         super();
         this.historiaClinica = new HistoriaClinica("HC-TEMP", "TEMP");
     }
 
-//GETTERS Y SETTERS
-
+    //GETTERS Y SETTERS
     public String getNroAfiliado() {
         return nroAfiliado;
     }
@@ -74,8 +70,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         return "Paciente";
     }
 
-//METODO PARA CONSULTAR HISTORIAL DE TURNOS
-
+    //METODO PARA CONSULTAR HISTORIAL DE TURNOS
     @Override
     public List<Turno> consultarHistorialTurnos(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
@@ -84,8 +79,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         return new ArrayList<>();
     }
 
-//METODO PARA CONSULTAR RECETAS
-
+    //METODO PARA CONSULTAR RECETAS
     @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
@@ -95,11 +89,8 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     }
 
     //METODO PARA SACAR TURNO (CORREGIDO)
-    // Firma modificada para recibir el Scanner (sc) de Main.
     public void sacarTurno(List<Profesional> profesionales, GestorPacientesJson gestorPacientes, GestorEmpleadosJson gestorEmpleados)
     {
-        // Se utiliza el 'sc' pasado por argumento, eliminando 'new Scanner(System.in)'
-
         System.out.println("\n--- SOLICITAR TURNO ---");
         System.out.println("ESPECIALIDADES:");
         int nro = 1;
@@ -135,8 +126,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
         List<Profesional> disponibles = new ArrayList<>();
         for(Profesional p : profesionales)
         {
-            // CORRECCION CLAVE: Comparar la especialidad (String) del Profesional
-            // con el nombre del Enum (String) del usuario.
+            // Comparar la especialidad (String) del Profesional con el nombre del Enum (String) del usuario.
             if (p.getEspecialidad().name().equalsIgnoreCase(nombreEspecialidad))
             {
                 disponibles.add(p);
@@ -210,8 +200,8 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
 
         System.out.println("TURNO RESERVADO: " + turnoSeleccionado.getDia() + " - " + turnoSeleccionado.getHora() + " Profesional: Dr. " + profesionalSeleccionado.getApellido());
 
-        gestorPacientes.actualizarPaciente(this);
-        gestorEmpleados.actualizarProfesional(profesionalSeleccionado);
+        gestorEmpleados.sincronizarProfesionalConJson(profesionalSeleccionado);
+        gestorPacientes.sincronizarPacienteConJson(this);
 
         gestorPacientes.guardarPacientes();
         gestorEmpleados.guardarEmpleados();

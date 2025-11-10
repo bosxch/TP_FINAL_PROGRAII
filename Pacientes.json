@@ -15,13 +15,29 @@
                 "fechaRegistro": "2025-01-20",
                 "idRegistro": "A-001-2025"
             }],
-            "historialTurnos": [{
-                "idPaciente": "40000001",
-                "idProfesional": "20000001",
-                "hora": "10:30",
-                "dia": "2025-11-15",
-                "idTurno": "T-001-2025"
-            }],
+            "historialTurnos": [
+                {
+                    "idPaciente": "40000001",
+                    "idProfesional": "20000001",
+                    "hora": "10:30",
+                    "dia": "2025-11-15",
+                    "idTurno": "T-001-2025"
+                },
+                {
+                    "idPaciente": "40000001",
+                    "idProfesional": "M-12345",
+                    "hora": "09:00",
+                    "dia": "2025-11-10",
+                    "idTurno": "T2"
+                },
+                {
+                    "idPaciente": "40000001",
+                    "idProfesional": "M-67890",
+                    "hora": "12:00",
+                    "dia": "2025-12-10",
+                    "idTurno": "1ee632a7-05b4-4f46-b88e-2cda494243e6"
+                }
+            ],
             "idHistoriaClinica": "HC-40000001"
         },
         "fechaNacimiento": "1990-05-14",
@@ -96,7 +112,13 @@
             "idPaciente": "40000004",
             "recetasEmitidas": [],
             "antecedentesMedicos": [],
-            "historialTurnos": [],
+            "historialTurnos": [{
+                "idPaciente": "40000004",
+                "idProfesional": "M123",
+                "hora": "11:00",
+                "dia": "2025-12-10",
+                "idTurno": "2de73419-0708-4aef-863c-2a15e3ea041a"
+            }],
             "idHistoriaClinica": "HC-40000004"
         },
         "fechaNacimiento": "1984-09-18",
@@ -115,5 +137,30 @@
         "correoElectronico": "diego.suarez@example.com",
         "dni": "40000004",
         "nacionalidad": "Argentina"
+    },
+    {
+        "historiaClinica": {
+            "idPaciente": "43626441",
+            "recetasEmitidas": [],
+            "antecedentesMedicos": [],
+            "historialTurnos": [],
+            "idHistoriaClinica": "HC-43626441"
+        },
+        "fechaNacimiento": "2001-09-12",
+        "obraSocial": "OSDE",
+        "apellido": "Del Bo",
+        "direccion": {
+            "numero": 1000,
+            "ciudad": "Olavarria",
+            "calle": "Falucho",
+            "departamento": "2B",
+            "provincia": "Chubut"
+        },
+        "contrasenia": "manu12345",
+        "nroAfiliado": "123456",
+        "nombre": "Manuel Ignacio",
+        "correoElectronico": "manu@gmail.com",
+        "dni": "43626441",
+        "nacionalidad": "Uruguayo"
     }
 ]

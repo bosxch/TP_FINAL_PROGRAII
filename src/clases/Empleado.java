@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public abstract class Empleado extends Persona {
     protected String legajo;
 
+    //CONSTRUCTOR
     public Empleado() {
         super();
     }
@@ -14,6 +15,7 @@ public abstract class Empleado extends Persona {
         this.legajo = legajo;
     }
 
+    //GETTERS Y SETTERS
     public String getLegajo() {
         return legajo;
     }

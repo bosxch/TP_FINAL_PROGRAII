@@ -4,17 +4,17 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HistoriaClinica<T> {
+public class HistoriaClinica {
 
     private String idHistoriaClinica;
-    private T idPaciente; // Usamos T para un identificador generico del paciente
-
+    private String idPaciente; // identificador generico del paciente
     private List<Turno> historialTurnos;
     private List<Receta> recetasEmitidas;
     private List<Antecedentes> antecedentesMedicos;
 
 
-    public HistoriaClinica(String idHistoriaClinica, T idPaciente) {
+    //CONSTRUCTOR
+    public HistoriaClinica(String idHistoriaClinica, String  idPaciente) {
         this.idHistoriaClinica = idHistoriaClinica;
         this.idPaciente = idPaciente;
         this.historialTurnos = new ArrayList<>();
@@ -23,23 +23,7 @@ public class HistoriaClinica<T> {
 
     }
 
-
-    public void agregarTurno(Turno turno) {
-
-        this.historialTurnos.add(turno);
-
-    }
-
-    public void agregarReceta(Receta receta) {
-        this.recetasEmitidas.add(receta);
-
-    }
-
-    public void agregarAntecedente(Antecedentes antecedente) {
-        this.antecedentesMedicos.add(antecedente);
-
-    }
-
+    //GETTERS Y SETTERS
     public String getIdHistoriaClinica() {
         return idHistoriaClinica;
     }
@@ -56,17 +40,15 @@ public class HistoriaClinica<T> {
         return antecedentesMedicos;
     }
 
-    public T getIdPaciente() {
+    public String  getIdPaciente() {
         return idPaciente;
     }
-
-
 
     public void setIdHistoriaClinica(String idHistoriaClinica) {
         this.idHistoriaClinica = idHistoriaClinica;
     }
 
-    public void setIdPaciente(T idPaciente) {
+    public void setIdPaciente(String  idPaciente) {
         this.idPaciente = idPaciente;
     }
 
@@ -82,8 +64,16 @@ public class HistoriaClinica<T> {
         this.antecedentesMedicos = antecedentesMedicos;
     }
 
-
-
+    //METODOS
+    public void agregarTurno(Turno turno) {
+        this.historialTurnos.add(turno);
+    }
+    public void agregarReceta(Receta receta) {
+        this.recetasEmitidas.add(receta);
+    }
+    public void agregarAntecedente(Antecedentes antecedente) {
+        this.antecedentesMedicos.add(antecedente);
+    }
 
     @Override
     public String toString() {

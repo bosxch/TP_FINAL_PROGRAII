@@ -3,8 +3,9 @@ import ManejoJSON.GestorPacientesJson;
 import clases.*;
 import excepciones.CredencialesIncorrectasException;
 import excepciones.DatoInvalidoException;
-import enums.Especialidad; // Asumir la importacion
-import enums.ObraSocial; // Asumir la importacion
+import enums.Especialidad;
+import enums.ObraSocial;
+import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -33,8 +34,7 @@ public class Main {
             personaLogueada = intentarLogin(email, contrasenia, gestorEmpleados, gestorPacientes);
 
             if (personaLogueada == null) {
-                // Si el login falla, lanzamos la excepcion personalizada
-                throw new CredencialesIncorrectasException("Credenciales incorrectas o usuario no encontrado.");
+                throw new CredencialesIncorrectasException("Datos ingresados incorrectos o usuario no encontrado.");
             }
 
             System.out.println("\nBienvenido, " + personaLogueada.getNombre() + " (" + personaLogueada.getTipo() + ")");
@@ -52,9 +52,7 @@ public class Main {
         boolean salir = false;
         while (!salir) {
             try {
-                // ============================
                 // MENU PACIENTE
-                // ============================
                 if (personaLogueada instanceof Paciente paciente) {
                     System.out.println("\n--- MENU PACIENTE ---");
                     System.out.println("1. Sacar turno");
@@ -66,7 +64,6 @@ public class Main {
 
                     switch (op) {
                         case 1 ->
-                            // CORRECCIÓN: Agregar 'sc' como argumento
                             paciente.sacarTurno(gestorEmpleados.getListaProfesionales(), gestorPacientes, gestorEmpleados);
 
 
@@ -77,9 +74,7 @@ public class Main {
                     }
                 }
 
-                // ============================
                 // MENU PROFESIONAL
-                // ============================
                 else if (personaLogueada instanceof Profesional profesional) {
                     System.out.println("\n--- MENU PROFESIONAL ---");
                     System.out.println("1. Consultar agenda completa");
@@ -130,15 +125,14 @@ public class Main {
                     }
                 }
 
-                // ============================
                 // MENU ADMINISTRATIVO
-                // ============================
                 else if (personaLogueada instanceof Administrativo adm) {
                     System.out.println("\n--- MENU ADMINISTRATIVO ---");
                     System.out.println("1. Listar empleados");
                     System.out.println("2. Listar pacientes");
                     System.out.println("3. Dar de alta nuevo empleado/paciente");
-                    System.out.println("4. Salir");
+                    System.out.println("4. Modificar o eliminar empleado/paciente");
+                    System.out.println("5. Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -160,7 +154,34 @@ public class Main {
                                 default -> System.out.println("Opcion invalida.");
                             }
                         }
-                        case 4 -> salir = true;
+                        case 4 -> {
+                            System.out.println("\n¿Que tipo de ususario desea modificar/eliminar?");
+                            System.out.println("1. Empleado");
+                            System.out.println("2. Paciente");
+                            System.out.print("Opcion: ");
+                            int tipo = leerOpcion(sc);
+                            switch (tipo) {
+                                case 1 -> {
+                                    System.out.println("1. Modificar empleado");
+                                    System.out.println("2. Eliminar empleado");
+                                    int opEmp = leerOpcion(sc);
+                                    if (opEmp == 1) modificarEmpleado(gestorEmpleados, sc);
+                                    else if (opEmp == 2) eliminarEmpleado(gestorEmpleados, sc);
+                                    else System.out.println("Opción inválida.");
+                                }
+                                case 2 -> {
+                                    System.out.println("1. Modificar paciente");
+                                    System.out.println("2. Eliminar paciente");
+                                    int opPac = leerOpcion(sc);
+                                    if (opPac == 1) modificarPaciente(gestorPacientes, sc);
+                                    else if (opPac == 2) eliminarPaciente(gestorPacientes, sc);
+                                    else System.out.println("Opción inválida.");
+                                }
+                                default -> System.out.println("Opción inválida.");
+                            }
+                        }
+
+                        case 5 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
@@ -174,20 +195,16 @@ public class Main {
         System.out.println("\n=== FIN DEL PROGRAMA ===");
         sc.close();
     }
-
-    // ==========================================================
     // METODOS AUXILIARES Y DE LOGIN
-    // ==========================================================
-
     private static Persona intentarLogin(String email, String contrasenia, GestorEmpleadosJson gestorEmpleados, GestorPacientesJson gestorPacientes) {
-        // --- Login en empleados ---
+        // Login en empleados
         for (Empleado emp : gestorEmpleados.getListaEmpleados()) {
             if (emp.getCorreoElectronico().equalsIgnoreCase(email) && emp.verificarContrasenia(contrasenia)) {
                 return emp;
             }
         }
 
-        // --- Login en pacientes ---
+        // Login en pacientes
         for (Paciente pac : gestorPacientes.getListaPacientes()) {
             if (pac.getCorreoElectronico().equalsIgnoreCase(email) && pac.verificarContrasenia(contrasenia)) {
                 return pac;
@@ -211,9 +228,7 @@ public class Main {
         }
     }
 
-    // ==========================================================
     // METODOS DE ALTA (para administrativo) con validacion de datos
-    // ==========================================================
 
     private static void altaProfesional(GestorEmpleadosJson gestor, Scanner sc) throws DatoInvalidoException {
         System.out.println("\n--- Alta de Profesional ---");
@@ -382,5 +397,144 @@ public class Main {
                 correo, pass, fecha, afiliado, obraStr);
         gestor.cargarPacienteDesdeJson();
         System.out.println("Paciente agregado y guardado en pacientes.json");
+    }
+
+    //METODOS PARA MODIFICAR Y ELIMINAR EMPLEADOS Y PACIENTES
+    private static void modificarPaciente(GestorPacientesJson gestor, Scanner sc) {
+        System.out.print("Ingrese el DNI del paciente a modificar: ");
+        String dni = sc.nextLine();
+        JSONObject paciente = gestor.obtenerPaciente(dni);
+        if (paciente == null) {
+            System.out.println("Paciente no encontrado.");
+            return;
+        }
+
+        try {
+            System.out.print("Nuevo nombre: ");
+            String nombre = sc.nextLine();
+            System.out.print("Nuevo apellido: ");
+            String apellido = sc.nextLine();
+            System.out.print("Nueva nacionalidad: ");
+            String nac = sc.nextLine();
+            System.out.print("Nueva calle: ");
+            String calle = sc.nextLine();
+            System.out.print("Nuevo número: ");
+            int numero = sc.nextInt(); sc.nextLine();
+            System.out.print("Nuevo depto: ");
+            String depto = sc.nextLine();
+            System.out.print("Nueva ciudad: ");
+            String ciudad = sc.nextLine();
+            System.out.print("Nueva provincia: ");
+            String provincia = sc.nextLine();
+            System.out.print("Nuevo correo: ");
+            String correo = sc.nextLine();
+            System.out.print("Nueva contraseña: ");
+            String pass = sc.nextLine();
+            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD): ");
+            String fecha = sc.nextLine();
+            System.out.print("Nuevo número de afiliado: ");
+            String afiliado = sc.nextLine();
+            System.out.print("Nueva obra social: ");
+            String obra = sc.nextLine().toUpperCase();
+
+            gestor.modificarPaciente(dni, nombre, apellido, nac, calle, numero, depto, ciudad,
+                    provincia, correo, pass, fecha, afiliado, obra);
+            gestor.cargarPacienteDesdeJson();
+            System.out.println("✅ Paciente modificado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al modificar paciente: " + e.getMessage());
+        }
+    }
+
+    private static void eliminarPaciente(GestorPacientesJson gestor, Scanner sc) {
+        System.out.print("Ingrese el DNI del paciente a eliminar: ");
+        String dni = sc.nextLine();
+        JSONObject paciente = gestor.obtenerPaciente(dni);
+        if (paciente == null) {
+            System.out.println("Paciente no encontrado.");
+            return;
+        }
+        gestor.eliminarPaciente(dni);
+        gestor.cargarPacienteDesdeJson();
+        System.out.println("🗑️ Paciente eliminado correctamente.");
+    }
+
+    private static void modificarEmpleado(GestorEmpleadosJson gestor, Scanner sc) {
+        System.out.print("Ingrese el DNI del empleado a modificar: ");
+        String dni = sc.nextLine();
+        JSONObject empleado = gestor.obtenerEmpleado(dni);
+        if (empleado == null) {
+            System.out.println("Empleado no encontrado.");
+            return;
+        }
+
+        try {
+            System.out.print("Ingrese el DNI del empleado a modificar: ");
+
+            System.out.print("Nuevo nombre: ");
+            String nombre = sc.nextLine();
+            System.out.print("Nuevo apellido: ");
+            String apellido = sc.nextLine();
+            System.out.print("Nueva nacionalidad: ");
+            String nac = sc.nextLine();
+            System.out.print("Nueva calle: ");
+            String calle = sc.nextLine();
+            System.out.print("Nuevo número: ");
+            int numero = sc.nextInt(); sc.nextLine();
+            System.out.print("Nuevo depto: ");
+            String depto = sc.nextLine();
+            System.out.print("Nueva ciudad: ");
+            String ciudad = sc.nextLine();
+            System.out.print("Nueva provincia: ");
+            String provincia = sc.nextLine();
+            System.out.print("Nuevo correo: ");
+            String correo = sc.nextLine();
+            System.out.print("Nueva contraseña: ");
+            String pass = sc.nextLine();
+            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD): ");
+            String fecha = sc.nextLine();
+
+            System.out.print("Nuevo legajo: ");
+            String legajo = sc.nextLine();
+
+            System.out.print("¿El empleado es profesional o administrativo? ");
+            String tipo = sc.nextLine().trim().toLowerCase();
+
+            String matricula = null;
+            String especialidad = null;
+            String sector = null;
+
+            if (tipo.equals("profesional")) {
+                System.out.print("Nueva matrícula: ");
+                matricula = sc.nextLine();
+                System.out.print("Nueva especialidad: ");
+                especialidad = sc.nextLine();
+            } else {
+                System.out.print("Nuevo sector: ");
+                sector = sc.nextLine();
+            }
+
+            gestor.modificarEmpleado(
+                    dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
+                    correo, pass, fecha, legajo, matricula, especialidad, sector
+            );
+            gestor.cargarEmpleadoDesdeJson();
+            System.out.println("✅ Empleado modificado correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al modificar empleado: " + e.getMessage());
+        }
+    }
+
+    private static void eliminarEmpleado(GestorEmpleadosJson gestor, Scanner sc) {
+        System.out.print("Ingrese el DNI del empleado a eliminar: ");
+        String dni = sc.nextLine();
+        JSONObject empleado = gestor.obtenerEmpleado(dni);
+        if (empleado == null) {
+            System.out.println("Empleado no encontrado.");
+            return;
+        }
+        gestor.eliminarEmpleado(dni);
+        gestor.cargarEmpleadoDesdeJson();
+        System.out.println("🗑️ Empleado eliminado correctamente.");
     }
 }

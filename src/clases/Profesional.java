@@ -3,9 +3,6 @@ package clases;
 import ManejoJSON.GestorPacientesJson;
 import enums.Especialidad;
 import interfaces.IConsultarHistoriaClinica;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -18,31 +15,63 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     private String matricula;
     private Especialidad especialidad;
     private List<Turno> agenda;
+    private List<HistoriaClinica> todasLasHistorias;
 
-    private List<HistoriaClinica<String>> todasLasHistorias;
-
-    public Profesional(String dni, String nombre, String apellido, String nacionalidad, Direccion direccion, String correoElectronico, String contraseña, LocalDate fechaNacimiento, String legajo, String matricula, Especialidad especialidad, List<Turno> agenda) {
+    //CONSTRUCTOR
+    public Profesional(String dni, String nombre, String apellido, String nacionalidad, Direccion direccion, String correoElectronico, String contraseña, LocalDate fechaNacimiento, String legajo, String matricula, Especialidad especialidad) {
         super(dni, nombre, apellido, nacionalidad, direccion, correoElectronico, contraseña, fechaNacimiento, legajo);
         this.matricula = matricula;
         this.especialidad = especialidad;
-        this.agenda = agenda != null ? agenda : new ArrayList<>();
         this.todasLasHistorias = new ArrayList<>();
-    }
-
-    public List<HistoriaClinica<String>> getTodasLasHistorias() {
-        return todasLasHistorias;
-    }
-
-    public void setTodasLasHistorias(List<HistoriaClinica<String>> todasLasHistorias) {
-        this.todasLasHistorias = todasLasHistorias;
+        this.agenda = generarAgenda();
     }
 
     public Profesional() {
         this.agenda = new ArrayList<>();
     }
+
+    //GETTERS Y STTERS
+    public List<HistoriaClinica> getTodasLasHistorias() {
+        return todasLasHistorias;
+    }
+
+    public void setTodasLasHistorias(List<HistoriaClinica> todasLasHistorias) {
+        this.todasLasHistorias = todasLasHistorias;
+    }
     @Override
     public String getTipo() {
         return "Profesional";
+    }
+
+    public String getMatricula() {
+        return matricula;
+    }
+
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
+    }
+
+    public Especialidad getEspecialidad() {
+        return especialidad;
+    }
+
+    public void setEspecialidad(Especialidad especialidad) {
+        this.especialidad = especialidad;
+    }
+
+    public List<Turno> getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(List<Turno> agenda) {
+        this.agenda = agenda;
+    }
+    public void verHistoriaClinica(HistoriaClinica historia) {
+        System.out.println(historia);
+    }
+    @Override
+    public String getTipoEmpleado() {
+        return "Profesional de la salud";
     }
 
     // CONSULTAR LA AGENDA
@@ -60,8 +89,8 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
 
         return agenda;
     }
-    // GENERA AGENDA PARA LOS PROXIMOS 5 DÌAS HÀBILES
-    private List<Turno> generarAgenda()
+    // GENERA AGENDA PARA LOS PROXIMOS 30 DÌAS HÀBILES de lun a vie
+    public List<Turno> generarAgenda()
     {
         List<Turno> agenda = new ArrayList<>();
         LocalDate hoy = LocalDate.now();
@@ -70,13 +99,18 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
 
         while (!hoy.isAfter(limite))
         {
-            if (hoy.getDayOfWeek() != DayOfWeek.SATURDAY && hoy.getDayOfWeek() != DayOfWeek.SUNDAY) continue;
-
-            for (int i = 8; i < 13; i++)
-                {
-                    Turno turno = new Turno(UUID.randomUUID().toString(), null, idProfesional, hoy, LocalTime.of(i, 0));
+            if (hoy.getDayOfWeek() != DayOfWeek.SATURDAY && hoy.getDayOfWeek() != DayOfWeek.SUNDAY) {
+                for (int i = 8; i < 13; i++) {
+                    Turno turno = new Turno(
+                            UUID.randomUUID().toString(),
+                            null, // paciente nulo = disponible
+                            idProfesional,
+                            hoy,
+                            LocalTime.of(i, 0)
+                    );
                     agenda.add(turno);
                 }
+            }
             hoy = hoy.plusDays(1);
         }
         return agenda;
@@ -122,12 +156,8 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         agenda.removeIf(t -> t.getDia().isBefore(hoy));
     }
 
+
     // METODO PARA MOSTRAR TURNOS
-    // Archivo: clases/Profesional.java
-
-// ...
-
-    // METODO PARA MOSTRAR TURNOS (Corregido para mostrar numeración correcta)
     public int mostrarDisponibilidad() {
         eliminarTurnosPasados();
         actualizarAgendaMensual();
@@ -162,12 +192,9 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         if (!hayOcupados) System.out.println("No hay turnos ocupados actualmente.");
     }
 
-    //METODO PARA TRAER TURNO POR INDICE
-// METODO PARA TRAER TURNO POR INDICE (CORREGIDO)
+    // METODO PARA TRAER TURNO POR INDICE
     public Turno getTurnoDisponiblePorIndice(int indice) {
-        // Nota: 'indice' aquí es la posición base 0 (ej: 0, 1, 2)
-        // que viene de 'turnoElegido - 1'.
-
+        // Ingresar posición base 0 (0, 1, 2)
         int contadorTurnosLibres = 0;
         for (Turno t : agenda) {
             // 1. Filtramos solo los turnos disponibles y futuros
@@ -184,39 +211,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         // Si el contador nunca coincide (porque el índice es demasiado grande o la lista estaba vacía)
         return null;
     }
-
-    //GETTERS Y SETTERS
-
-    public String getMatricula() {
-        return matricula;
-    }
-
-    public void setMatricula(String matricula) {
-        this.matricula = matricula;
-    }
-
-    public Especialidad getEspecialidad() {
-        return especialidad;
-    }
-
-    public void setEspecialidad(Especialidad especialidad) {
-        this.especialidad = especialidad;
-    }
-
-    public List<Turno> getAgenda() {
-        return agenda;
-    }
-
-    public void setAgenda(List<Turno> agenda) {
-        this.agenda = agenda;
-    }
-    public void verHistoriaClinica(HistoriaClinica<?> historia) {
-        System.out.println(historia);
-    }
-
+    //CONSULTAR HISTORIA CLINICA
     @Override
     public List<Turno> consultarHistorialTurnos(String dniPaciente) {
-        for (HistoriaClinica<String> historia : todasLasHistorias) {
+        for (HistoriaClinica historia : todasLasHistorias) {
             if (historia.getIdPaciente().equals(dniPaciente)) {
                 return historia.getHistorialTurnos();
             }
@@ -224,9 +222,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         return new ArrayList<>(); // si no encuentra la historia
     }
 
+    //CONSULTAR HISTORIA RECETA
     @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
-        for (HistoriaClinica<String> historia : todasLasHistorias) {
+        for (HistoriaClinica historia : todasLasHistorias) {
             if (historia.getIdPaciente().equals(dniPaciente)) {
                 return historia.getRecetasEmitidas();
             }
@@ -234,13 +233,8 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         return new ArrayList<>();
     }
 
-    @Override
-    public String getTipoEmpleado() {
-        return "Profesional de la salud";
-    }
-
-
-    public void agregarRecetaAHistoria(HistoriaClinica<?> historia, Receta receta, GestorPacientesJson gestorPacientes) {
+    //AGREGAR RECETA A HC DE PACIENTE
+    public void agregarRecetaAHistoria(HistoriaClinica historia, Receta receta, GestorPacientesJson gestorPacientes) {
         // 1. Agregar la receta a la Historia Clínica en memoria
         historia.agregarReceta(receta);
 
@@ -255,7 +249,8 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         }
     }
 
-    public void agregarAntecedenteAHistoria(HistoriaClinica<?> historia, Antecedentes antecedente, GestorPacientesJson gestorPacientes) {
+    //AGREGAR ANTECEDENTE A HC DE PACIENTE
+    public void agregarAntecedenteAHistoria(HistoriaClinica historia, Antecedentes antecedente, GestorPacientesJson gestorPacientes) {
         // 1. Agregar el antecedente a la Historia Clínica en memoria
         historia.agregarAntecedente(antecedente);
 
@@ -269,6 +264,19 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         }
     }
 
+    //AGREGAR UN TURNO
+    public void agregarTurno(Turno turno) {
+        if (agenda == null) {
+            agenda = new ArrayList<>();
+        }
+        for (Turno t : agenda) {
+            if (t.getIdTurno().equals(turno.getIdTurno())) {
+                t.setIdPaciente(turno.getIdPaciente());
+                return;
+            }
+        }
+        agenda.add(turno);
+    }
 
     @Override
     public String toString() {
@@ -281,12 +289,7 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
                 '}';
     }
 
-    public void agregarTurno(Turno turno) {
-        if (agenda == null) {
-            agenda = new ArrayList<>();
-        }
-        agenda.add(turno);
-    }
+
 }
 
 

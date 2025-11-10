@@ -3,9 +3,9 @@ package clases;
 import java.time.LocalDate;
 
 public class Administrativo extends Empleado {
-
     private String sector;
 
+    //CONSTRUCTOR
     public Administrativo(String dni, String nombre, String apellido, String nacionalidad,
                           Direccion direccion, String correoElectronico, String contrasenia,
                           LocalDate fechaNacimiento, String legajo, String sector) {
@@ -18,6 +18,7 @@ public class Administrativo extends Empleado {
         super();
     }
 
+    //GETTERS Y SETTERS
     @Override
     public String getTipoEmpleado() {
         return "Personal Administrativo";
@@ -34,11 +35,8 @@ public class Administrativo extends Empleado {
     public String getTipo() {
         return "Administrativo";
     }
-
     @Override
     public String toString() {
         return super.toString() + " | Sector: " + sector;
     }
-
-    //agregar sacar y eliminar turno
 }
