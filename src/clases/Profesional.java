@@ -1,7 +1,11 @@
 package clases;
 
+import ManejoJSON.GestorPacientesJson;
 import enums.Especialidad;
 import interfaces.IConsultarHistoriaClinica;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -41,6 +45,21 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         return "Profesional";
     }
 
+    // CONSULTAR LA AGENDA
+    public List<Turno> consultarAgenda() {
+        System.out.println("Agenda del profesional " + getNombre() + " " + getApellido() + " (" + getMatricula() + "):");
+        if (agenda == null || agenda.isEmpty()) {
+            System.out.println("No hay turnos cargados en la agenda.");
+            return new ArrayList<>();
+        }
+
+        for (Turno turno : agenda) {
+            String estado = (turno.getIdPaciente() == null) ? "DISPONIBLE" : "OCUPADO - Paciente: " + turno.getIdPaciente();
+            System.out.println(turno.getDia() + " " + turno.getHora() + " → " + estado);
+        }
+
+        return agenda;
+    }
     // GENERA AGENDA PARA LOS PROXIMOS 5 DÌAS HÀBILES
     private List<Turno> generarAgenda()
     {
@@ -124,6 +143,17 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         }
         return cantidadDisponibles;
     }
+    public void mostrarTurnosOcupados() {
+        System.out.println("\nTurnos ocupados del profesional " + getNombre() + " " + getApellido() + ":");
+        boolean hayOcupados = false;
+        for (Turno t : agenda) {
+            if (t.getIdPaciente() != null) {
+                System.out.println("Día: " + t.getDia() + " " + t.getHora() + " → Paciente: " + t.getIdPaciente());
+                hayOcupados = true;
+            }
+        }
+        if (!hayOcupados) System.out.println("No hay turnos ocupados actualmente.");
+    }
 
     //METODO PARA TRAER TURNO POR INDICE
     public Turno getTurnoDisponiblePorIndice(int indice) {
@@ -194,17 +224,47 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     }
 
 
-    public void agregarRecetaAHistoria(HistoriaClinica<?> historia, Receta receta) {
+    public void agregarRecetaAHistoria(HistoriaClinica<?> historia, Receta receta, GestorPacientesJson gestorPacientes) {
         historia.agregarReceta(receta);
+        JSONObject pacienteJson = gestorPacientes.obtenerPaciente((String) historia.getIdPaciente());
+        if (pacienteJson != null) {
+            JSONObject historiaJson = null;
+            try {
+                historiaJson = pacienteJson.getJSONObject("historiaClinica");
+                JSONArray recetasJson = historiaJson.getJSONArray("recetasEmitidas");
+
+                JSONObject recetaJson = new JSONObject();
+                recetaJson.put("idReceta", receta.getIdReceta());
+                recetaJson.put("diagnostico", receta.getDiagnostico());
+                recetaJson.put("medicamento", receta.getMedicamento());
+                recetaJson.put("dosis", receta.getDosis());
+
+                recetasJson.put(recetaJson);
+
+
+                gestorPacientes.guardarPacientes();
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
-    public void agregarAntecedenteAHistoria(HistoriaClinica<?> historia, Antecedentes antecedente) {
+    public void agregarAntecedenteAHistoria(HistoriaClinica<?> historia, Antecedentes antecedente, GestorPacientesJson gestorPacientes) {
         historia.agregarAntecedente(antecedente);
+        try {
+            JSONObject pacienteJson = gestorPacientes.obtenerPaciente((String) historia.getIdPaciente());
+            if (pacienteJson != null) {
+                JSONObject historiaJson = null;
+                historiaJson = pacienteJson.getJSONObject("historiaClinica");
+                JSONArray antecedentesJson = historiaJson.getJSONArray("antecedentesMedicos");
+                antecedentesJson.put(antecedente.getDescripcion()); // o antecedente.toString() si querés más info
+                gestorPacientes.guardarPacientes();
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void agregarTurnoAHistoria(HistoriaClinica<?> historia, Turno turno) {
-        historia.agregarTurno(turno);
-    }
 
     @Override
     public String toString() {
@@ -215,6 +275,13 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
                 ", agenda=" + agenda +
                 ", todasLasHistorias=" + todasLasHistorias +
                 '}';
+    }
+
+    public void agregarTurno(Turno turno) {
+        if (agenda == null) {
+            agenda = new ArrayList<>();
+        }
+        agenda.add(turno);
     }
 }
 

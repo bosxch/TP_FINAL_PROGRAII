@@ -1,6 +1,8 @@
 package clases;
 
 
+import ManejoJSON.GestorEmpleadosJson;
+import ManejoJSON.GestorPacientesJson;
 import enums.Especialidad;
 import enums.ObraSocial;
 import interfaces.IConsultarHistoriaClinica;
@@ -78,7 +80,7 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     }
 
     //METODO PARA SACAR TURNO
-    public void sacarTurno(List<Profesional> profesionales)
+    public void sacarTurno(List<Profesional> profesionales, GestorPacientesJson gestorPacientes, GestorEmpleadosJson gestorEmpleados)
     {
         Scanner scanner = new Scanner(System.in);
 
@@ -149,8 +151,17 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
 
         turnoSeleccionado.setIdPaciente(this.getDni());
         historiaClinica.agregarTurno(turnoSeleccionado);
+        profesionalSeleccionado.agregarTurno(turnoSeleccionado);
 
         System.out.println("TURNO RESERVADO: " + turnoSeleccionado.getDia() + " - " + turnoSeleccionado.getHora() + " Profesional: Dr. " + profesionalSeleccionado.getApellido());
 
+        gestorPacientes.actualizarPaciente(this);
+        gestorEmpleados.actualizarProfesional(profesionalSeleccionado);
+
+        gestorPacientes.guardarPacientes();
+        gestorEmpleados.guardarEmpleados();
+
+
+        System.out.println("Turno guardado correctamente en los archivos JSON.");
     }
 }

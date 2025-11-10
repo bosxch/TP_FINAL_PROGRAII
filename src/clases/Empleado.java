@@ -5,8 +5,6 @@ import java.time.LocalDate;
 public abstract class Empleado extends Persona {
     protected String legajo;
 
-
-
     public Empleado() {
         super();
     }

@@ -1,154 +1,133 @@
 [
-  {
-    "tipo": "Profesional",
-    "dni": "30000001",
-    "nombre": "Laura",
-    "apellido": "Martínez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Sarmiento",
-      "numero": 500,
-      "departamento": "1",
-      "ciudad": "Buenos Aires",
-      "provincia": "Buenos Aires"
+    {
+        "tipo": "Profesional",
+        "fechaNacimiento": "1980-06-12",
+        "direccion": {
+            "numero": 500,
+            "ciudad": "Buenos Aires",
+            "calle": "Sarmiento",
+            "departamento": "1",
+            "provincia": "Buenos Aires"
+        },
+        "nombre": "Laura",
+        "especialidad": "CARDIOLOGO",
+        "agenda": [
+            {
+                "idPaciente": null,
+                "idProfesional": "M-12345",
+                "hora": "08:00",
+                "dia": "2025-11-10",
+                "idTurno": "T1"
+            },
+            {
+                "idPaciente": null,
+                "idProfesional": "M-12345",
+                "hora": "09:00",
+                "dia": "2025-11-10",
+                "idTurno": "T2"
+            }
+        ],
+        "nacionalidad": "Argentina",
+        "legajo": "P001",
+        "apellido": "Martínez",
+        "matricula": "M-12345",
+        "contrasenia": "laura123",
+        "correoElectronico": "laura.martinez@hospital.com",
+        "dni": "30000001"
     },
-    "correoElectronico": "laura.martinez@hospital.com",
-    "contrasenia": "laura123",
-    "fechaNacimiento": "1980-06-12",
-    "legajo": "P001",
-    "matricula": "M-12345",
-    "especialidad": "CARDIOLOGO",
-    "agenda": [
-      {
-        "idTurno": "T1",
-        "idPaciente": null,
-        "idProfesional": "M-12345",
-        "dia": "2025-11-10",
-        "hora": "08:00"
-      },
-      {
-        "idTurno": "T2",
-        "idPaciente": null,
-        "idProfesional": "M-12345",
-        "dia": "2025-11-10",
-        "hora": "09:00"
-      }
-    ]
-  },
-  {
-    "tipo": "Profesional",
-    "dni": "30000002",
-    "nombre": "Santiago",
-    "apellido": "López",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Alsina",
-      "numero": 800,
-      "departamento": "3",
-      "ciudad": "La Plata",
-      "provincia": "Buenos Aires"
+    {
+        "tipo": "Profesional",
+        "fechaNacimiento": "1985-03-22",
+        "direccion": {
+            "numero": 800,
+            "ciudad": "La Plata",
+            "calle": "Alsina",
+            "departamento": "3",
+            "provincia": "Buenos Aires"
+        },
+        "nombre": "Santiago",
+        "especialidad": "PEDIATRA",
+        "agenda": [
+            {
+                "idPaciente": null,
+                "idProfesional": "M-67890",
+                "hora": "08:00",
+                "dia": "2025-11-11",
+                "idTurno": "T3"
+            },
+            {
+                "idPaciente": null,
+                "idProfesional": "M-67890",
+                "hora": "09:00",
+                "dia": "2025-11-11",
+                "idTurno": "T4"
+            }
+        ],
+        "nacionalidad": "Argentina",
+        "legajo": "P002",
+        "apellido": "López",
+        "matricula": "M-67890",
+        "contrasenia": "santi123",
+        "correoElectronico": "santiago.lopez@hospital.com",
+        "dni": "30000002"
     },
-    "correoElectronico": "santiago.lopez@hospital.com",
-    "contrasenia": "santi123",
-    "fechaNacimiento": "1985-03-22",
-    "legajo": "P002",
-    "matricula": "M-67890",
-    "especialidad": "PEDIATRA",
-    "agenda": [
-      {
-        "idTurno": "T3",
-        "idPaciente": null,
-        "idProfesional": "M-67890",
-        "dia": "2025-11-11",
-        "hora": "08:00"
-      },
-      {
-        "idTurno": "T4",
-        "idPaciente": null,
-        "idProfesional": "M-67890",
-        "dia": "2025-11-11",
-        "hora": "09:00"
-      }
-    ]
-  },
-  {
-    "tipo": "Administrativo",
-    "dni": "20000001",
-    "nombre": "Carla",
-    "apellido": "Domínguez",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Lavalle",
-      "numero": 120,
-      "departamento": "4",
-      "ciudad": "Buenos Aires",
-      "provincia": "Buenos Aires"
+    {
+        "tipo": "Administrativo",
+        "legajo": "A001",
+        "fechaNacimiento": "1992-01-10",
+        "apellido": "Domínguez",
+        "direccion": {
+            "numero": 120,
+            "ciudad": "Buenos Aires",
+            "calle": "Lavalle",
+            "departamento": "4",
+            "provincia": "Buenos Aires"
+        },
+        "contrasenia": "carla321",
+        "nombre": "Carla",
+        "correoElectronico": "carla.dominguez@hospital.com",
+        "sector": "Admisión",
+        "dni": "20000001",
+        "nacionalidad": "Argentina"
     },
-    "correoElectronico": "carla.dominguez@hospital.com",
-    "contrasenia": "carla321",
-    "fechaNacimiento": "1992-01-10",
-    "legajo": "A001",
-    "sector": "Admisión"
-  },
-  {
-    "tipo": "Administrativo",
-    "dni": "20000002",
-    "nombre": "Nicolás",
-    "apellido": "Fernández",
-    "nacionalidad": "Argentina",
-    "direccion": {
-      "calle": "Mitre",
-      "numero": 890,
-      "departamento": "5",
-      "ciudad": "Rosario",
-      "provincia": "Santa Fe"
+    {
+        "tipo": "Administrativo",
+        "legajo": "A002",
+        "fechaNacimiento": "1990-07-19",
+        "apellido": "Fernández",
+        "direccion": {
+            "numero": 890,
+            "ciudad": "Rosario",
+            "calle": "Mitre",
+            "departamento": "5",
+            "provincia": "Santa Fe"
+        },
+        "contrasenia": "nico456",
+        "nombre": "Nicolás",
+        "correoElectronico": "nicolas.fernandez@hospital.com",
+        "sector": "Facturación",
+        "dni": "20000002",
+        "nacionalidad": "Argentina"
     },
-    "correoElectronico": "nicolas.fernandez@hospital.com",
-    "contrasenia": "nico456",
-    "fechaNacimiento": "1990-07-19",
-    "legajo": "A002",
-    "sector": "Facturación"
-  },
-  {
-    "dni": "30000003",
-    "nombre": "Julieta",
-    "apellido": "Ramírez",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Mitre", "numero": 200, "departamento": "5", "ciudad": "Rosario", "provincia": "Santa Fe" },
-    "correoElectronico": "julieta.ramirez@hospital.com",
-    "contrasenia": "juli123",
-    "fechaNacimiento": "1987-02-10",
-    "legajo": "P003",
-    "matricula": "M-34567",
-    "especialidad": "DERMATOLOGO",
-    "agenda": []
-  },
-  {
-    "dni": "30000004",
-    "nombre": "Lucas",
-    "apellido": "Paz",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Belgrano", "numero": 912, "departamento": "2","ciudad": "Córdoba", "provincia": "Córdoba" },
-    "correoElectronico": "lucas.paz@hospital.com",
-    "contrasenia": "lucasp",
-    "fechaNacimiento": "1990-04-19",
-    "legajo": "P004",
-    "matricula": "M-45678",
-    "especialidad": "CIRUJANO",
-    "agenda": []
-  },
-  {
-    "dni": "30000005",
-    "nombre": "Ana",
-    "apellido": "Fernández",
-    "nacionalidad": "Argentina",
-    "direccion": { "calle": "Italia", "numero": 410, "departamento": "8","ciudad": "Mendoza", "provincia": "Mendoza" },
-    "correoElectronico": "ana.fernandez@hospital.com",
-    "contrasenia": "ana123",
-    "fechaNacimiento": "1992-08-25",
-    "legajo": "P005",
-    "matricula": "M-98765",
-    "especialidad": "PSIQUIATRA",
-    "agenda": []
-  }
+    {
+        "tipo": "Profesional",
+        "fechaNacimiento": "1985-05-10",
+        "direccion": {
+            "numero": 123,
+            "ciudad": "Buenos Aires",
+            "calle": "San Martín",
+            "departamento": "A",
+            "provincia": "Buenos Aires"
+        },
+        "nombre": "Juan",
+        "especialidad": "CARDIOLOGO",
+        "agenda": [],
+        "nacionalidad": "Argentina",
+        "legajo": "E001",
+        "apellido": "Pérez",
+        "matricula": "M123",
+        "contrasenia": "1234",
+        "correoElectronico": "juan@correo.com",
+        "dni": "101"
+    }
 ]

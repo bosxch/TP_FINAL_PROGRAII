@@ -5,15 +5,17 @@ public class Direccion {
     private int numero;
     private String departamento;
     private String ciudad;
+    private String provincia;
 
     public Direccion() {
     }
 
-    public Direccion(String calle, int numero, String departamento, String ciudad) {
+    public Direccion(String calle, int numero, String departamento, String ciudad, String provincia) {
         this.calle = calle;
         this.numero = numero;
         this.departamento = departamento;
         this.ciudad = ciudad;
+        this.provincia = provincia;
     }
 
     public String getCalle() {
@@ -46,6 +48,14 @@ public class Direccion {
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
+    }
+
+    public String getProvincia() {
+        return provincia;
+    }
+
+    public void setProvincia(String provincia) {
+        this.provincia = provincia;
     }
 
     @Override
