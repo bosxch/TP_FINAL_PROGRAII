@@ -38,7 +38,9 @@ public class GestorPacientesJson {
         }
     }
 
-
+    public List<Paciente> getListaPacientes() {
+        return listaPacientes;
+    }
     //CRUD JSON
 
     // Agregar paciente
@@ -158,6 +160,25 @@ public class GestorPacientesJson {
         return null;
     }
 
+    //BUSCAR PACIENTE
+    public Paciente buscarPacientePorDni(String dni) {
+        for (Paciente p : listaPacientes) {
+            if (p.getDni().equals(dni)) return p;
+        }
+        return null;
+    }
+
+    public void actualizarPaciente(Paciente paciente) {
+        for (int i = 0; i < listaPacientes.size(); i++) {
+            if (listaPacientes.get(i).getDni().equals(paciente.getDni())) {
+                listaPacientes.set(i, paciente);
+                return;
+            }
+        }
+    }
+
+    //ACTUALIZAR PACIENTE
+
     // Guardar cambios en el archivo JSON
     private void guardar() {
         try {
@@ -168,6 +189,9 @@ public class GestorPacientesJson {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void guardarPacientes() {
+        guardar();
     }
 
     //BAJAR DE JSON A OBJETOS

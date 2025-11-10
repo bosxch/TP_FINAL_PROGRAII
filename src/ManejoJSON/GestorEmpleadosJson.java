@@ -147,6 +147,9 @@ public class GestorEmpleadosJson {
         }
     }
 
+    public List<Empleado> getListaEmpleados() { return listaEmpleados; }
+    public List<Profesional> getListaProfesionales() { return listaProfesionales; }
+
     // Listar todos los empleados
     public void listarEmpleados() {
         try {
@@ -173,6 +176,16 @@ public class GestorEmpleadosJson {
         return null;
     }
 
+    //ACTUALIZAR PROFESIONAL
+    public void actualizarProfesional(Profesional profesional) {
+        for (int i = 0; i < listaProfesionales.size(); i++) {
+            if (listaProfesionales.get(i).getDni().equals(profesional.getDni())) {
+                listaProfesionales.set(i, profesional);
+                return;
+            }
+        }
+    }
+
     // Guardar cambios en el archivo JSON
     private void guardar() {
         try {
@@ -180,6 +193,9 @@ public class GestorEmpleadosJson {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public void guardarEmpleados() {
+        guardar();
     }
 
     //CARGAR EMPLEADOS DESDE ARCHIVO JSON EN OBJETOS
