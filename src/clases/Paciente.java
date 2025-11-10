@@ -83,9 +83,35 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
         if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
-            return historiaClinica.getRecetasEmitidas();
+            List<Receta> recetas = historiaClinica.getRecetasEmitidas();
+            if (recetas == null || recetas.isEmpty()) {
+                throw new excepciones.RecetasNoDisponiblesException(
+                    "El paciente con DNI " + dniPaciente + " no tiene recetas emitidas."
+                );
+            }
+            return recetas;
         }
-        return new ArrayList<>();
+        throw new excepciones.HistoriaClinicaNoEncontradaException(
+            "No se encontró la historia clínica para el paciente con DNI " + dniPaciente
+        );
+    }
+    
+    //METODO PARA MOSTRAR RECETAS CON VALIDACIÓN
+    public void mostrarRecetas() {
+        try {
+            List<Receta> recetas = consultarRecetas(this.getDni());
+            System.out.println("\n=== RECETAS EMITIDAS ===");
+            System.out.println("Paciente: " + this.getNombre() + " " + this.getApellido() + " (DNI: " + this.getDni() + ")");
+            System.out.println("Total de recetas: " + recetas.size());
+            System.out.println("------------------------");
+            for (int i = 0; i < recetas.size(); i++) {
+                System.out.println((i + 1) + ". " + recetas.get(i));
+            }
+        } catch (excepciones.RecetasNoDisponiblesException e) {
+            System.out.println("\n⚠️ " + e.getMessage());
+        } catch (excepciones.HistoriaClinicaNoEncontradaException e) {
+            System.out.println("\n❌ " + e.getMessage());
+        }
     }
 
     //METODO PARA SACAR TURNO (CORREGIDO)

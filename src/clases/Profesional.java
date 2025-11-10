@@ -227,10 +227,18 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     public List<Receta> consultarRecetas(String dniPaciente) {
         for (HistoriaClinica historia : todasLasHistorias) {
             if (historia.getIdPaciente().equals(dniPaciente)) {
-                return historia.getRecetasEmitidas();
+                List<Receta> recetas = historia.getRecetasEmitidas();
+                if (recetas == null || recetas.isEmpty()) {
+                    throw new excepciones.RecetasNoDisponiblesException(
+                        "El paciente con DNI " + dniPaciente + " no tiene recetas emitidas."
+                    );
+                }
+                return recetas;
             }
         }
-        return new ArrayList<>();
+        throw new excepciones.HistoriaClinicaNoEncontradaException(
+            "No se encontró la historia clínica para el paciente con DNI " + dniPaciente
+        );
     }
 
     //AGREGAR RECETA A HC DE PACIENTE

@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -68,7 +69,7 @@ public class Main {
 
 
                         case 2 -> System.out.println(paciente.getHistoriaClinica());
-                        case 3 -> paciente.getHistoriaClinica().getRecetasEmitidas().forEach(System.out::println);
+                        case 3 -> paciente.mostrarRecetas();
                         case 4 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
@@ -82,7 +83,8 @@ public class Main {
                     System.out.println("3. Ver turnos ocupados");
                     System.out.println("4. Agregar receta a paciente");
                     System.out.println("5. Agregar antecedente a paciente");
-                    System.out.println("6. Salir");
+                    System.out.println("6. Consultar recetas de paciente");
+                    System.out.println("7. Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -93,8 +95,13 @@ public class Main {
                         case 4 -> {
                             System.out.print("DNI del paciente: ");
                             String dni = sc.nextLine();
-                            Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
-                            if (pac != null) {
+                            try {
+                                Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+                                if (pac == null) {
+                                    throw new excepciones.PacienteNoEncontradoException(
+                                        "No se encontró un paciente con DNI: " + dni
+                                    );
+                                }
                                 System.out.print("Diagnostico: ");
                                 String diag = sc.nextLine();
                                 System.out.print("Medicamento: ");
@@ -103,24 +110,65 @@ public class Main {
                                 String dosis = sc.nextLine();
                                 Receta receta = new Receta(UUID.randomUUID().toString(), diag, med, dosis);
                                 profesional.agregarRecetaAHistoria(pac.getHistoriaClinica(), receta, gestorPacientes);
-                                System.out.println("Receta agregada y guardada.");
-                            } else System.out.println("Paciente no encontrado.");
+                                System.out.println("✅ Receta agregada y guardada correctamente.");
+                            } catch (excepciones.PacienteNoEncontradoException e) {
+                                System.out.println("❌ " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("❌ Error al agregar receta: " + e.getMessage());
+                            }
                         }
                         case 5 -> {
                             System.out.print("DNI del paciente: ");
                             String dni = sc.nextLine();
-                            Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
-                            if (pac != null) {
+                            try {
+                                Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+                                if (pac == null) {
+                                    throw new excepciones.PacienteNoEncontradoException(
+                                        "No se encontró un paciente con DNI: " + dni
+                                    );
+                                }
                                 System.out.print("Descripcion: ");
                                 String desc = sc.nextLine();
                                 System.out.print("Tipo de antecedente: ");
                                 String tipo = sc.nextLine();
                                 Antecedentes ant = new Antecedentes(UUID.randomUUID().toString(), desc, tipo);
                                 profesional.agregarAntecedenteAHistoria(pac.getHistoriaClinica(), ant, gestorPacientes);
-                                System.out.println("Antecedente agregado y guardado.");
-                            } else System.out.println("Paciente no encontrado.");
+                                System.out.println("✅ Antecedente agregado y guardado correctamente.");
+                            } catch (excepciones.PacienteNoEncontradoException e) {
+                                System.out.println("❌ " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("❌ Error al agregar antecedente: " + e.getMessage());
+                            }
                         }
-                        case 6 -> salir = true;
+                        case 6 -> {
+                            System.out.print("DNI del paciente para consultar recetas: ");
+                            String dni = sc.nextLine();
+                            try {
+                                Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+                                if (pac == null) {
+                                    throw new excepciones.PacienteNoEncontradoException(
+                                        "No se encontró un paciente con DNI: " + dni
+                                    );
+                                }
+                                List<Receta> recetas = profesional.consultarRecetas(dni);
+                                System.out.println("\n=== RECETAS DEL PACIENTE ===");
+                                System.out.println("Paciente: " + pac.getNombre() + " " + pac.getApellido() + " (DNI: " + dni + ")");
+                                System.out.println("Total de recetas: " + recetas.size());
+                                System.out.println("------------------------");
+                                for (int i = 0; i < recetas.size(); i++) {
+                                    System.out.println((i + 1) + ". " + recetas.get(i));
+                                }
+                            } catch (excepciones.PacienteNoEncontradoException e) {
+                                System.out.println("❌ " + e.getMessage());
+                            } catch (excepciones.RecetasNoDisponiblesException e) {
+                                System.out.println("⚠️ " + e.getMessage());
+                            } catch (excepciones.HistoriaClinicaNoEncontradaException e) {
+                                System.out.println("❌ " + e.getMessage());
+                            } catch (Exception e) {
+                                System.out.println("❌ Error al consultar recetas: " + e.getMessage());
+                            }
+                        }
+                        case 7 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
@@ -403,60 +451,152 @@ public class Main {
     private static void modificarPaciente(GestorPacientesJson gestor, Scanner sc) {
         System.out.print("Ingrese el DNI del paciente a modificar: ");
         String dni = sc.nextLine();
-        JSONObject paciente = gestor.obtenerPaciente(dni);
-        if (paciente == null) {
-            System.out.println("Paciente no encontrado.");
-            return;
-        }
-
+        
         try {
-            System.out.print("Nuevo nombre: ");
+            Paciente pacienteObj = gestor.buscarPacientePorDni(dni);
+            if (pacienteObj == null) {
+                throw new excepciones.PacienteNoEncontradoException(
+                    "No se encontró un paciente con DNI: " + dni
+                );
+            }
+            
+            JSONObject paciente = gestor.obtenerPaciente(dni);
+            if (paciente == null) {
+                throw new excepciones.PacienteNoEncontradoException(
+                    "No se encontró un paciente con DNI: " + dni
+                );
+            }
+
+            System.out.println("\n=== MODIFICAR PACIENTE ===");
+            System.out.println("Paciente actual: " + pacienteObj.getNombre() + " " + pacienteObj.getApellido());
+            System.out.println("(Presione Enter para mantener el valor actual)\n");
+
+            System.out.print("Nuevo nombre [" + pacienteObj.getNombre() + "]: ");
             String nombre = sc.nextLine();
-            System.out.print("Nuevo apellido: ");
+            if (nombre.trim().isEmpty()) nombre = pacienteObj.getNombre();
+
+            System.out.print("Nuevo apellido [" + pacienteObj.getApellido() + "]: ");
             String apellido = sc.nextLine();
-            System.out.print("Nueva nacionalidad: ");
+            if (apellido.trim().isEmpty()) apellido = pacienteObj.getApellido();
+
+            System.out.print("Nueva nacionalidad [" + pacienteObj.getNacionalidad() + "]: ");
             String nac = sc.nextLine();
-            System.out.print("Nueva calle: ");
+            if (nac.trim().isEmpty()) nac = pacienteObj.getNacionalidad();
+
+            System.out.print("Nueva calle [" + pacienteObj.getDireccion().getCalle() + "]: ");
             String calle = sc.nextLine();
-            System.out.print("Nuevo número: ");
-            int numero = sc.nextInt(); sc.nextLine();
-            System.out.print("Nuevo depto: ");
+            if (calle.trim().isEmpty()) calle = pacienteObj.getDireccion().getCalle();
+
+            System.out.print("Nuevo número [" + pacienteObj.getDireccion().getNumero() + "]: ");
+            String numStr = sc.nextLine();
+            int numero;
+            if (numStr.trim().isEmpty()) {
+                numero = pacienteObj.getDireccion().getNumero();
+            } else {
+                try {
+                    numero = Integer.parseInt(numStr);
+                } catch (NumberFormatException e) {
+                    throw new DatoInvalidoException("El número de calle debe ser un valor numérico.");
+                }
+            }
+
+            System.out.print("Nuevo depto [" + pacienteObj.getDireccion().getDepartamento() + "]: ");
             String depto = sc.nextLine();
-            System.out.print("Nueva ciudad: ");
+            if (depto.trim().isEmpty()) depto = pacienteObj.getDireccion().getDepartamento();
+
+            System.out.print("Nueva ciudad [" + pacienteObj.getDireccion().getCiudad() + "]: ");
             String ciudad = sc.nextLine();
-            System.out.print("Nueva provincia: ");
+            if (ciudad.trim().isEmpty()) ciudad = pacienteObj.getDireccion().getCiudad();
+
+            System.out.print("Nueva provincia [" + pacienteObj.getDireccion().getProvincia() + "]: ");
             String provincia = sc.nextLine();
-            System.out.print("Nuevo correo: ");
+            if (provincia.trim().isEmpty()) provincia = pacienteObj.getDireccion().getProvincia();
+
+            System.out.print("Nuevo correo [" + pacienteObj.getCorreoElectronico() + "]: ");
             String correo = sc.nextLine();
-            System.out.print("Nueva contraseña: ");
+            if (correo.trim().isEmpty()) correo = pacienteObj.getCorreoElectronico();
+
+            System.out.print("Nueva contraseña (dejar vacío para mantener la actual): ");
             String pass = sc.nextLine();
-            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD): ");
+            if (pass.trim().isEmpty()) {
+                // Mantener la contraseña actual (obtenerla del JSON)
+                pass = paciente.getString("contrasenia");
+            }
+
+            System.out.print("Nueva fecha de nacimiento (YYYY-MM-DD) [" + pacienteObj.getFechaNacimiento() + "]: ");
             String fecha = sc.nextLine();
-            System.out.print("Nuevo número de afiliado: ");
+            if (fecha.trim().isEmpty()) {
+                fecha = pacienteObj.getFechaNacimiento().toString();
+            } else {
+                // Validar formato de fecha
+                try {
+                    LocalDate.parse(fecha);
+                } catch (Exception e) {
+                    throw new DatoInvalidoException("Formato de fecha inválido. Use YYYY-MM-DD.");
+                }
+            }
+
+            System.out.print("Nuevo número de afiliado [" + pacienteObj.getNroAfiliado() + "]: ");
             String afiliado = sc.nextLine();
-            System.out.print("Nueva obra social: ");
+            if (afiliado.trim().isEmpty()) afiliado = pacienteObj.getNroAfiliado();
+
+            System.out.print("Nueva obra social [" + pacienteObj.getObraSocial() + "]: ");
             String obra = sc.nextLine().toUpperCase();
+            if (obra.trim().isEmpty()) {
+                obra = pacienteObj.getObraSocial().name();
+            } else {
+                // Validar enum
+                try {
+                    ObraSocial.valueOf(obra);
+                } catch (IllegalArgumentException e) {
+                    throw new DatoInvalidoException("La obra social ingresada no es válida.");
+                }
+            }
 
             gestor.modificarPaciente(dni, nombre, apellido, nac, calle, numero, depto, ciudad,
                     provincia, correo, pass, fecha, afiliado, obra);
             gestor.cargarPacienteDesdeJson();
-            System.out.println("✅ Paciente modificado correctamente.");
+            System.out.println("\n✅ Paciente modificado correctamente.");
+        } catch (excepciones.PacienteNoEncontradoException e) {
+            System.out.println("❌ " + e.getMessage());
+        } catch (DatoInvalidoException e) {
+            System.out.println("❌ Error de validación: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("Error al modificar paciente: " + e.getMessage());
+            System.out.println("❌ Error al modificar paciente: " + e.getMessage());
         }
     }
 
     private static void eliminarPaciente(GestorPacientesJson gestor, Scanner sc) {
         System.out.print("Ingrese el DNI del paciente a eliminar: ");
         String dni = sc.nextLine();
-        JSONObject paciente = gestor.obtenerPaciente(dni);
-        if (paciente == null) {
-            System.out.println("Paciente no encontrado.");
-            return;
+        
+        try {
+            Paciente pacienteObj = gestor.buscarPacientePorDni(dni);
+            if (pacienteObj == null) {
+                throw new excepciones.PacienteNoEncontradoException(
+                    "No se encontró un paciente con DNI: " + dni
+                );
+            }
+            
+            System.out.println("\n⚠️ ADVERTENCIA: Está por eliminar al paciente:");
+            System.out.println("   Nombre: " + pacienteObj.getNombre() + " " + pacienteObj.getApellido());
+            System.out.println("   DNI: " + pacienteObj.getDni());
+            System.out.print("¿Está seguro? (escriba 'SI' para confirmar): ");
+            String confirmacion = sc.nextLine();
+            
+            if (!confirmacion.equalsIgnoreCase("SI")) {
+                System.out.println("❌ Operación cancelada.");
+                return;
+            }
+            
+            gestor.eliminarPaciente(dni);
+            gestor.cargarPacienteDesdeJson();
+            System.out.println("✅ Paciente eliminado correctamente.");
+        } catch (excepciones.PacienteNoEncontradoException e) {
+            System.out.println("❌ " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("❌ Error al eliminar paciente: " + e.getMessage());
         }
-        gestor.eliminarPaciente(dni);
-        gestor.cargarPacienteDesdeJson();
-        System.out.println("🗑️ Paciente eliminado correctamente.");
     }
 
     private static void modificarEmpleado(GestorEmpleadosJson gestor, Scanner sc) {
