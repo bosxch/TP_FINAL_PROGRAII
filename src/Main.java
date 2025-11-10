@@ -59,7 +59,7 @@ public class Main {
                     System.out.println("1. Sacar turno");
                     System.out.println("2. Ver historia clinica");
                     System.out.println("3. Ver recetas emitidas");
-                    System.out.println("4. Salir");
+                    System.out.println("0. Volver / Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -70,7 +70,7 @@ public class Main {
 
                         case 2 -> System.out.println(paciente.getHistoriaClinica());
                         case 3 -> paciente.mostrarRecetas();
-                        case 4 -> salir = true;
+                        case 0 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
@@ -84,7 +84,7 @@ public class Main {
                     System.out.println("4. Agregar receta a paciente");
                     System.out.println("5. Agregar antecedente a paciente");
                     System.out.println("6. Consultar recetas de paciente");
-                    System.out.println("7. Salir");
+                    System.out.println("0. Volver / Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -169,7 +169,7 @@ public class Main {
                                 System.out.println("❌ Error al consultar recetas: " + e.getMessage());
                             }
                         }
-                        case 7 -> salir = true;
+                        case 0 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
@@ -181,7 +181,7 @@ public class Main {
                     System.out.println("2. Listar pacientes");
                     System.out.println("3. Dar de alta nuevo empleado/paciente");
                     System.out.println("4. Modificar o eliminar empleado/paciente");
-                    System.out.println("5. Salir");
+                    System.out.println("0. Volver / Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -193,6 +193,7 @@ public class Main {
                             System.out.println("1. Profesional");
                             System.out.println("2. Administrativo");
                             System.out.println("3. Paciente");
+                            System.out.println("0. Volver atrás");
                             System.out.print("Opcion: ");
                             int tipo = leerOpcion(sc);
 
@@ -200,6 +201,7 @@ public class Main {
                                 case 1 -> altaProfesional(gestorEmpleados, sc);
                                 case 2 -> altaAdministrativo(gestorEmpleados, sc);
                                 case 3 -> altaPaciente(gestorPacientes, sc);
+                                case 0 -> System.out.println("Volviendo al menú principal...");
                                 default -> System.out.println("Opcion invalida.");
                             }
                         }
@@ -207,30 +209,38 @@ public class Main {
                             System.out.println("\n¿Que tipo de ususario desea modificar/eliminar?");
                             System.out.println("1. Empleado");
                             System.out.println("2. Paciente");
+                            System.out.println("0. Volver atrás");
                             System.out.print("Opcion: ");
                             int tipo = leerOpcion(sc);
                             switch (tipo) {
                                 case 1 -> {
-                                    System.out.println("1. Modificar empleado");
+                                    System.out.println("\n1. Modificar empleado");
                                     System.out.println("2. Eliminar empleado");
+                                    System.out.println("0. Volver atrás");
+                                    System.out.print("Opcion: ");
                                     int opEmp = leerOpcion(sc);
                                     if (opEmp == 1) modificarEmpleado(gestorEmpleados, sc);
                                     else if (opEmp == 2) eliminarEmpleado(gestorEmpleados, sc);
+                                    else if (opEmp == 0) System.out.println("Volviendo al menú principal...");
                                     else System.out.println("Opción inválida.");
                                 }
                                 case 2 -> {
-                                    System.out.println("1. Modificar paciente");
+                                    System.out.println("\n1. Modificar paciente");
                                     System.out.println("2. Eliminar paciente");
+                                    System.out.println("0. Volver atrás");
+                                    System.out.print("Opcion: ");
                                     int opPac = leerOpcion(sc);
                                     if (opPac == 1) modificarPaciente(gestorPacientes, sc);
                                     else if (opPac == 2) eliminarPaciente(gestorPacientes, sc);
+                                    else if (opPac == 0) System.out.println("Volviendo al menú principal...");
                                     else System.out.println("Opción inválida.");
                                 }
+                                case 0 -> System.out.println("Volviendo al menú principal...");
                                 default -> System.out.println("Opción inválida.");
                             }
                         }
 
-                        case 5 -> salir = true;
+                        case 0 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
@@ -323,7 +333,16 @@ public class Main {
         String legajo = sc.nextLine();
         System.out.print("Matricula: ");
         String matricula = sc.nextLine();
-        System.out.print("Especialidad (CARDIOLOGIA, PEDIATRIA, TRAUMATOLOGIA, etc.): ");
+        System.out.print("Especialidad (CARDIOLOGO," +
+                " CIRUJANO," +
+                " CLINICO," +
+                " DERMATOLOGO," +
+                " GINECOLOGO," +
+                " GUARDIA," +
+                " NEUROLOGO," +
+                " ORTOPEDISTA," +
+                " PEDIATRA," +
+                " PSIQUIATRA): ");
         String espStr = sc.nextLine().toUpperCase();
 
         // Validacion de Enum
