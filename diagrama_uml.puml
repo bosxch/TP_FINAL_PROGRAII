@@ -1,0 +1,384 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+
+' ============================================
+' ENUMS
+' ============================================
+enum Especialidad {
+    CARDIOLOGO
+    CIRUJANO
+    CLINICO
+    DERMATOLOGO
+    GINECOLOGO
+    GUARDIA
+    NEUROLOGO
+    ORTOPEDISTA
+    PEDIATRA
+    PSIQUIATRA
+}
+
+enum ObraSocial {
+    GALENO
+    IOMA
+    MEDICUS
+    OMINT
+    OSDE
+    PAMI
+    PARTICULAR
+    SALUD_TOTAL
+    SANCOR_SALUD
+    SWISS_MEDICAL
+}
+
+enum HorariosDisponibles {
+    H_0700
+    H_0715
+    H_0730
+    ...
+    H_1645
+    + getHora() : LocalTime
+}
+
+' ============================================
+' EXCEPCIONES
+' ============================================
+class CredencialesIncorrectasException {
+    + CredencialesIncorrectasException(String)
+}
+
+class DatoInvalidoException {
+    + DatoInvalidoException(String)
+}
+
+class TurnoNoDisponibleException {
+    + TurnoNoDisponibleException(String)
+}
+
+class RecetasNoDisponiblesException {
+    + RecetasNoDisponiblesException(String)
+}
+
+class PacienteNoEncontradoException {
+    + PacienteNoEncontradoException(String)
+}
+
+class HistoriaClinicaNoEncontradaException {
+    + HistoriaClinicaNoEncontradaException(String)
+}
+
+RuntimeException <|-- CredencialesIncorrectasException
+RuntimeException <|-- DatoInvalidoException
+RuntimeException <|-- TurnoNoDisponibleException
+RuntimeException <|-- RecetasNoDisponiblesException
+RuntimeException <|-- PacienteNoEncontradoException
+RuntimeException <|-- HistoriaClinicaNoEncontradaException
+
+' ============================================
+' CLASES DE DATOS
+' ============================================
+class Direccion {
+    - calle : String
+    - numero : int
+    - departamento : String
+    - ciudad : String
+    - provincia : String
+    + Direccion()
+    + Direccion(String, int, String, String, String)
+    + getters/setters
+    + toString() : String
+}
+
+class Turno {
+    - idTurno : String
+    - idPaciente : String
+    - idProfesional : String
+    - dia : LocalDate
+    - hora : LocalTime
+    + Turno()
+    + Turno(String, String, String, LocalDate, LocalTime)
+    + getters/setters
+    + estaDisponible() : boolean
+    + toString() : String
+}
+
+class Receta {
+    - idReceta : String
+    - diagnostico : String
+    - medicamento : String
+    - dosis : String
+    - fechaEmision : LocalDate
+    + Receta()
+    + Receta(String, String, String, String)
+    + getters/setters
+    + toString() : String
+}
+
+class Antecedentes {
+    - idRegistro : String
+    - descripcion : String
+    - fechaRegistro : LocalDate
+    - tipoAntecedente : String
+    + Antecedentes()
+    + Antecedentes(String, String, String)
+    + getters/setters
+    + toString() : String
+}
+
+class HistoriaClinica {
+    - idHistoriaClinica : String
+    - idPaciente : String
+    - historialTurnos : List<Turno>
+    - recetasEmitidas : List<Receta>
+    - antecedentesMedicos : List<Antecedentes>
+    + HistoriaClinica(String, String)
+    + getters/setters
+    + agregarTurno(Turno)
+    + agregarReceta(Receta)
+    + agregarAntecedente(Antecedentes)
+    + toString() : String
+}
+
+' ============================================
+' INTERFACES
+' ============================================
+interface IConsultarHistoriaClinica {
+    + consultarHistorialTurnos(String) : List<Turno>
+    + consultarRecetas(String) : List<Receta>
+}
+
+' ============================================
+' CLASE BASE Y HERENCIA
+' ============================================
+abstract class Persona {
+    # dni : String
+    # nombre : String
+    # apellido : String
+    # nacionalidad : String
+    # direccion : Direccion
+    # correoElectronico : String
+    # contraseniaEncriptada : String
+    # fechaNacimiento : LocalDate
+    + Persona()
+    + Persona(String, String, String, String, Direccion, String, String, LocalDate)
+    + getters/setters
+    + {abstract} getTipo() : String
+    + getEdad() : int
+    + verificarContrasenia(String) : boolean
+    + cambiarContrasenia(String, String) : boolean
+    + login(String, String) : boolean
+    + toString() : String
+}
+
+abstract class Empleado {
+    # legajo : String
+    + Empleado()
+    + Empleado(String, String, String, String, Direccion, String, String, LocalDate, String)
+    + getters/setters
+    + {abstract} getTipoEmpleado() : String
+    + toString() : String
+}
+
+class Administrativo {
+    - sector : String
+    + Administrativo()
+    + Administrativo(String, String, String, String, Direccion, String, String, LocalDate, String, String)
+    + getters/setters
+    + getTipoEmpleado() : String
+    + getTipo() : String
+    + toString() : String
+}
+
+class Profesional {
+    - matricula : String
+    - especialidad : Especialidad
+    - agenda : List<Turno>
+    - todasLasHistorias : List<HistoriaClinica>
+    + Profesional()
+    + Profesional(String, String, String, String, Direccion, String, String, LocalDate, String, String, Especialidad)
+    + getters/setters
+    + getTipo() : String
+    + getTipoEmpleado() : String
+    + verHistoriaClinica(HistoriaClinica)
+    + consultarAgenda() : List<Turno>
+    + generarAgenda() : List<Turno>
+    + actualizarAgendaMensual()
+    + eliminarTurnosPasados()
+    + mostrarDisponibilidad() : int
+    + mostrarTurnosOcupados()
+    + getTurnoDisponiblePorIndice(int) : Turno
+    + consultarHistorialTurnos(String) : List<Turno>
+    + consultarRecetas(String) : List<Receta>
+    + agregarRecetaAHistoria(HistoriaClinica, Receta, GestorPacientesJson)
+    + agregarAntecedenteAHistoria(HistoriaClinica, Antecedentes, GestorPacientesJson)
+    + agregarTurno(Turno)
+    + toString() : String
+}
+
+class Paciente {
+    - nroAfiliado : String
+    - obraSocial : ObraSocial
+    - historiaClinica : HistoriaClinica
+    + Paciente()
+    + Paciente(String, String, String, String, Direccion, String, String, LocalDate, String, ObraSocial)
+    + Paciente(String, String, String, String, Direccion, String, String, LocalDate, String, ObraSocial, HistoriaClinica)
+    + getters/setters
+    + getTipo() : String
+    + consultarHistorialTurnos(String) : List<Turno>
+    + consultarRecetas(String) : List<Receta>
+    + mostrarRecetas()
+    + sacarTurno(List<Profesional>, GestorPacientesJson, GestorEmpleadosJson)
+}
+
+' ============================================
+' CLASES DE GESTIÓN Y UTILIDADES
+' ============================================
+class Seguridad {
+    + {static} encriptar(String) : String
+}
+
+class GestionUsuarios {
+    - usuarios : List<Persona>
+    + GestionUsuarios()
+    + GestionUsuarios(List<Persona>)
+    + getters/setters
+    + agregarUsuario(Persona)
+    + login(String, String) : Persona
+}
+
+class JSONUtiles {
+    + {static} grabar(JSONArray, String)
+    + {static} leer(String) : JSONTokener
+}
+
+class GestorEmpleadosJson {
+    - archivoJson : String
+    - empleados : JSONArray
+    - usuarios : List<Persona>
+    - listaEmpleados : List<Empleado>
+    - listaProfesionales : List<Profesional>
+    + GestorEmpleadosJson(String)
+    + agregarEmpleado(...)
+    + modificarEmpleado(...)
+    + eliminarEmpleado(String)
+    + listarEmpleados()
+    + obtenerEmpleado(String) : JSONObject
+    + actualizarProfesional(Profesional)
+    + guardarEmpleados()
+    + sincronizarProfesionalConJson(Profesional)
+    + cargarEmpleadoDesdeJson()
+    + getListaEmpleados() : List<Empleado>
+    + getListaProfesionales() : List<Profesional>
+}
+
+class GestorPacientesJson {
+    - archivoJson : String
+    - pacientes : JSONArray
+    - usuarios : List<Persona>
+    - listaPacientes : List<Paciente>
+    + GestorPacientesJson(String)
+    + agregarPaciente(...)
+    + modificarPaciente(...)
+    + eliminarPaciente(String)
+    + listarPacientes()
+    + obtenerPaciente(String) : JSONObject
+    + buscarPacientePorDni(String) : Paciente
+    + actualizarPaciente(Paciente)
+    + guardarPacientes()
+    + sincronizarPacienteConJson(Paciente)
+    + cargarPacienteDesdeJson()
+    + getListaPacientes() : List<Paciente>
+}
+
+class Main {
+    + {static} main(String[])
+    + {static} intentarLogin(String, String, GestorEmpleadosJson, GestorPacientesJson) : Persona
+    + {static} leerOpcion(Scanner) : int
+    + {static} altaProfesional(GestorEmpleadosJson, Scanner)
+    + {static} altaAdministrativo(GestorEmpleadosJson, Scanner)
+    + {static} altaPaciente(GestorPacientesJson, Scanner)
+    + {static} modificarPaciente(GestorPacientesJson, Scanner)
+    + {static} eliminarPaciente(GestorPacientesJson, Scanner)
+    + {static} modificarEmpleado(GestorEmpleadosJson, Scanner)
+    + {static} eliminarEmpleado(GestorEmpleadosJson, Scanner)
+}
+
+' ============================================
+' RELACIONES DE HERENCIA
+' ============================================
+Persona <|-- Empleado
+Persona <|-- Paciente
+Empleado <|-- Administrativo
+Empleado <|-- Profesional
+
+' ============================================
+' RELACIONES DE IMPLEMENTACIÓN
+' ============================================
+IConsultarHistoriaClinica <|.. Profesional
+IConsultarHistoriaClinica <|.. Paciente
+
+' ============================================
+' RELACIONES DE COMPOSICIÓN/AGREGACIÓN
+' ============================================
+Persona *-- Direccion : tiene
+Paciente *-- HistoriaClinica : tiene
+HistoriaClinica "1" *-- "0..*" Turno : historialTurnos
+HistoriaClinica "1" *-- "0..*" Receta : recetasEmitidas
+HistoriaClinica "1" *-- "0..*" Antecedentes : antecedentesMedicos
+Profesional "1" *-- "0..*" Turno : agenda
+Profesional "1" o-- "0..*" HistoriaClinica : todasLasHistorias
+GestionUsuarios "1" o-- "0..*" Persona : usuarios
+GestorEmpleadosJson "1" o-- "0..*" Empleado : listaEmpleados
+GestorEmpleadosJson "1" o-- "0..*" Profesional : listaProfesionales
+GestorPacientesJson "1" o-- "0..*" Paciente : listaPacientes
+
+' ============================================
+' RELACIONES DE ASOCIACIÓN
+' ============================================
+Turno --> Paciente : idPaciente
+Turno --> Profesional : idProfesional
+Profesional --> Especialidad : especialidad
+Paciente --> ObraSocial : obraSocial
+Profesional ..> GestorPacientesJson : usa
+Paciente ..> GestorPacientesJson : usa
+Paciente ..> GestorEmpleadosJson : usa
+Main ..> GestorEmpleadosJson : usa
+Main ..> GestorPacientesJson : usa
+Persona ..> Seguridad : usa
+Profesional ..> GestorPacientesJson : usa
+
+' ============================================
+' NOTAS
+' ============================================
+note right of Persona
+  Clase abstracta base
+  para todos los usuarios
+  del sistema
+end note
+
+note right of Profesional
+  Gestiona su agenda
+  de turnos y puede
+  consultar historias clínicas
+end note
+
+note right of HistoriaClinica
+  Contiene el historial
+  médico completo del
+  paciente
+end note
+
+note right of Paciente
+  consultarRecetas() lanza
+  RecetasNoDisponiblesException
+  si no hay recetas
+end note
+
+note right of Profesional
+  consultarRecetas() lanza
+  RecetasNoDisponiblesException
+  o HistoriaClinicaNoEncontradaException
+end note
+
+@enduml
+
