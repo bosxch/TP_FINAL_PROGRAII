@@ -82,18 +82,31 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     //METODO PARA CONSULTAR RECETAS
     @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
-        if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
-            List<Receta> recetas = historiaClinica.getRecetasEmitidas();
-            if (recetas == null || recetas.isEmpty()) {
-                throw new excepciones.RecetasNoDisponiblesException(
-                    "El paciente con DNI " + dniPaciente + " no tiene recetas emitidas."
-                );
-            }
-            return recetas;
+        // Validar que el DNI coincida con el paciente actual
+        if (!this.getDni().equals(dniPaciente)) {
+            throw new excepciones.HistoriaClinicaNoEncontradaException(
+                "El DNI proporcionado no coincide con el paciente actual."
+            );
         }
-        throw new excepciones.HistoriaClinicaNoEncontradaException(
-            "No se encontró la historia clínica para el paciente con DNI " + dniPaciente
-        );
+        
+        // Validar que la historia clínica exista
+        if (historiaClinica == null) {
+            throw new excepciones.HistoriaClinicaNoEncontradaException(
+                "No se encontró la historia clínica para el paciente con DNI " + dniPaciente
+            );
+        }
+        
+        // Obtener las recetas
+        List<Receta> recetas = historiaClinica.getRecetasEmitidas();
+        
+        // Validar que la lista de recetas no sea null o vacía
+        if (recetas == null || recetas.isEmpty()) {
+            throw new excepciones.RecetasNoDisponiblesException(
+                "El paciente con DNI " + dniPaciente + " no tiene recetas emitidas."
+            );
+        }
+        
+        return recetas;
     }
     
     //METODO PARA MOSTRAR RECETAS CON VALIDACIÓN

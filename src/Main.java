@@ -150,7 +150,8 @@ public class Main {
                                         "No se encontró un paciente con DNI: " + dni
                                     );
                                 }
-                                List<Receta> recetas = profesional.consultarRecetas(dni);
+                                // Consultar recetas directamente desde el paciente
+                                List<Receta> recetas = pac.consultarRecetas(dni);
                                 System.out.println("\n=== RECETAS DEL PACIENTE ===");
                                 System.out.println("Paciente: " + pac.getNombre() + " " + pac.getApellido() + " (DNI: " + dni + ")");
                                 System.out.println("Total de recetas: " + recetas.size());

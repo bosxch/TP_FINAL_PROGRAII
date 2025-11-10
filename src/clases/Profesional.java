@@ -250,10 +250,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         Paciente pacienteAActualizar = gestorPacientes.buscarPacientePorDni((String) historia.getIdPaciente());
 
         if (pacienteAActualizar != null) {
-            // 3. Persistir el objeto Paciente completo al archivo JSON
-            // El metodo actualizarPaciente internamente ya actualiza la lista en memoria del gestor
+            // 3. Actualizar el paciente en la lista en memoria
             gestorPacientes.actualizarPaciente(pacienteAActualizar);
-            gestorPacientes.guardarPacientes(); // <--- ESTE ES EL PASO CRÍTICO: GUARDA EN EL ARCHIVO FÍSICO
+            // 4. Sincronizar con JSON (incluye recetas, turnos y antecedentes)
+            gestorPacientes.sincronizarPacienteConJson(pacienteAActualizar);
         }
     }
 
@@ -266,9 +266,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         Paciente pacienteAActualizar = gestorPacientes.buscarPacientePorDni((String) historia.getIdPaciente());
 
         if (pacienteAActualizar != null) {
-            // 3. Persistir el objeto Paciente completo al archivo JSON
+            // 3. Actualizar el paciente en la lista en memoria
             gestorPacientes.actualizarPaciente(pacienteAActualizar);
-            gestorPacientes.guardarPacientes(); // <--- ESTE ES EL PASO CRÍTICO: GUARDA EN EL ARCHIVO FÍSICO
+            // 4. Sincronizar con JSON (incluye recetas, turnos y antecedentes)
+            gestorPacientes.sincronizarPacienteConJson(pacienteAActualizar);
         }
     }
 
