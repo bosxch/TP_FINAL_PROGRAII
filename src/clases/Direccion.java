@@ -7,6 +7,7 @@ public class Direccion {
     private String ciudad;
     private String provincia;
 
+    //CONSTRUCTOR
     public Direccion() {
     }
 
@@ -18,6 +19,7 @@ public class Direccion {
         this.provincia = provincia;
     }
 
+    //GETTERS Y SETTERS
     public String getCalle() {
         return calle;
     }
@@ -53,7 +55,6 @@ public class Direccion {
     public String getProvincia() {
         return provincia;
     }
-
     public void setProvincia(String provincia) {
         this.provincia = provincia;
     }

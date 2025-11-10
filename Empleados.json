@@ -20,7 +20,7 @@
                 "idTurno": "T1"
             },
             {
-                "idPaciente": null,
+                "idPaciente": "40000001",
                 "idProfesional": "M-12345",
                 "hora": "09:00",
                 "dia": "2025-11-10",
@@ -47,22 +47,13 @@
         },
         "nombre": "Santiago",
         "especialidad": "PEDIATRA",
-        "agenda": [
-            {
-                "idPaciente": null,
-                "idProfesional": "M-67890",
-                "hora": "08:00",
-                "dia": "2025-11-11",
-                "idTurno": "T3"
-            },
-            {
-                "idPaciente": null,
-                "idProfesional": "M-67890",
-                "hora": "09:00",
-                "dia": "2025-11-11",
-                "idTurno": "T4"
-            }
-        ],
+        "agenda": [{
+            "idPaciente": "40000001",
+            "idProfesional": "M-67890",
+            "hora": "12:00",
+            "dia": "2025-12-10",
+            "idTurno": "1ee632a7-05b4-4f46-b88e-2cda494243e6"
+        }],
         "nacionalidad": "Argentina",
         "legajo": "P002",
         "apellido": "López",
@@ -121,7 +112,13 @@
         },
         "nombre": "Juan",
         "especialidad": "CARDIOLOGO",
-        "agenda": [],
+        "agenda": [{
+            "idPaciente": "40000004",
+            "idProfesional": "M123",
+            "hora": "11:00",
+            "dia": "2025-12-10",
+            "idTurno": "2de73419-0708-4aef-863c-2a15e3ea041a"
+        }],
         "nacionalidad": "Argentina",
         "legajo": "E001",
         "apellido": "Pérez",

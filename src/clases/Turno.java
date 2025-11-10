@@ -5,11 +5,12 @@ import java.time.LocalTime;
 
 public class Turno {
     private String idTurno;
-    private String idPaciente; // ID del paciente que toma el turno
-    private String idProfesional; // ID del profesional asignado
+    private String idPaciente;
+    private String idProfesional;
     private LocalDate dia;
     private LocalTime hora;
 
+    //CONSTRUCTOR
     public Turno() {}
     public Turno(String idTurno, String idPaciente, String idProfesional, LocalDate dia, LocalTime hora) {
         this.idTurno = idTurno;
@@ -19,6 +20,7 @@ public class Turno {
         this.hora = hora;
     }
 
+    //GETTERS Y SETTERS
     public String getIdTurno() {
         return idTurno;
     }
@@ -70,6 +72,7 @@ public class Turno {
                 '}';
     }
 
+    //VER DISPONIBILIDAD DE TURNO
     public boolean estaDisponible() {
         return idPaciente == null;
     }

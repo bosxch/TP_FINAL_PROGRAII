@@ -30,9 +30,6 @@ public class GestionUsuarios {
         this.usuarios.add(usuario);
     }
 
-
-
-
     //Login centralizado: devuelve el usuario correspondiente según su tipo
     public Persona login(String email, String contrasenia) {
         for (Persona usuario : usuarios) {
@@ -41,6 +38,7 @@ public class GestionUsuarios {
                 return usuario; // Devuelve el objeto del tipo correcto (Paciente, Profesional, Administrativo)
             }
         }
+        System.out.println("No se pudo iniciar sesion");
         return null; // no encontrado o contraseña incorrecta
     }
 

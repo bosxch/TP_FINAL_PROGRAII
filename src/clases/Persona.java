@@ -62,12 +62,6 @@ public abstract class Persona {
         return fechaNacimiento;
     }
 
-    // Calcula la edad dinamicamente
-    public int getEdad() {
-        if (fechaNacimiento == null) return 0;
-        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
-    }
-
     // *** Setters ***
     public void setDni(String dni) {
         this.dni = dni;
@@ -98,6 +92,12 @@ public abstract class Persona {
     }
 
     public abstract String getTipo();
+
+    // Calcula la edad dinamicamente
+    public int getEdad() {
+        if (fechaNacimiento == null) return 0;
+        return Period.between(fechaNacimiento, LocalDate.now()).getYears();
+    }
 
     //  Verifica la contraseña encriptado contra la ingresada por el usurio
     public boolean verificarContrasenia(String contraseñaIngresada) {

@@ -8,6 +8,7 @@ public class Receta {
     private String dosis;
     private LocalDate fechaEmision;
 
+    //CONSTRUCTOR
     public Receta(String idReceta, String diagnostico, String medicamento, String dosis) {
         this.idReceta = idReceta;
         this.diagnostico = diagnostico;
@@ -15,11 +16,11 @@ public class Receta {
         this.dosis = dosis;
         this.fechaEmision = LocalDate.now(); // Fecha actual
     }
-
     public Receta() {
         this.fechaEmision = LocalDate.now();
     }
 
+    //GETTERS Y SETTERS
     public String getIdReceta() {
         return idReceta;
     }
@@ -33,7 +34,6 @@ public class Receta {
     public LocalDate getFechaEmision() {
         return fechaEmision;
     }
-
     public void setIdReceta(String idReceta) {
         this.idReceta = idReceta;
     }
@@ -41,11 +41,9 @@ public class Receta {
     public void setMedicamento(String medicamento) {
         this.medicamento = medicamento;
     }
-
     public void setFechaEmision(LocalDate fechaEmision) {
         this.fechaEmision = fechaEmision;
     }
-
     public void setDosis(String dosis) {
         this.dosis = dosis;
     }
