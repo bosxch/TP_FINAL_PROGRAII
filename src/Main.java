@@ -100,8 +100,9 @@ public class Main {
                     System.out.println("3. Ver turnos ocupados");
                     System.out.println("4. Agregar receta a paciente");
                     System.out.println("5. Agregar antecedente a paciente");
-                    System.out.println("6. Consultar recetas de paciente");
-                    System.out.println("0. Volver / Salir");
+    System.out.println("6. Consultar recetas de paciente");          // (feature)
+    System.out.println("7. Ver la historia clinica del paciente");   // (Andrés)
+    System.out.println("0. Volver / Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -157,39 +158,51 @@ public class Main {
                                 System.out.println("❌ Error al agregar antecedente: " + e.getMessage());
                             }
                         }
-                        case 6 -> {
-                            System.out.print("DNI del paciente para consultar recetas: ");
-                            String dni = sc.nextLine();
-                            try {
-                                Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
-                                if (pac == null) {
-                                    throw new excepciones.PacienteNoEncontradoException(
-                                        "No se encontró un paciente con DNI: " + dni
-                                    );
-                                }
-                                // Consultar recetas directamente desde el paciente
-                                List<Receta> recetas = pac.consultarRecetas(dni);
-                                System.out.println("\n=== RECETAS DEL PACIENTE ===");
-                                System.out.println("Paciente: " + pac.getNombre() + " " + pac.getApellido() + " (DNI: " + dni + ")");
-                                System.out.println("Total de recetas: " + recetas.size());
-                                System.out.println("------------------------");
-                                for (int i = 0; i < recetas.size(); i++) {
-                                    System.out.println((i + 1) + ". " + recetas.get(i));
-                                }
-                            } catch (excepciones.PacienteNoEncontradoException e) {
-                                System.out.println("❌ " + e.getMessage());
-                            } catch (excepciones.RecetasNoDisponiblesException e) {
-                                System.out.println("⚠️ " + e.getMessage());
-                            } catch (excepciones.HistoriaClinicaNoEncontradaException e) {
-                                System.out.println("❌ " + e.getMessage());
-                            } catch (Exception e) {
-                                System.out.println("❌ Error al consultar recetas: " + e.getMessage());
-                            }
-                        }
-                        case 0 -> salir = true;
-                        default -> System.out.println("Opcion invalida.");
-                    }
+                        
+            case 6 -> { // Consultar recetas de paciente (feature)
+            System.out.print("DNI del paciente para consultar recetas: ");
+            String dni = sc.nextLine();
+            try {
+                Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+                if (pac == null) {
+                    throw new excepciones.PacienteNoEncontradoException(
+                        "No se encontró un paciente con DNI: " + dni
+                    );
                 }
+                // Consultar recetas directamente desde el paciente
+                List<Receta> recetas = pac.consultarRecetas(dni);
+                System.out.println("\n=== RECETAS DEL PACIENTE ===");
+                System.out.println("Paciente: " + pac.getNombre() + " " + pac.getApellido() + " (DNI: " + dni + ")");
+                System.out.println("Total de recetas: " + recetas.size());
+                System.out.println("------------------------");
+                for (int i = 0; i < recetas.size(); i++) {
+                    System.out.println((i + 1) + ". " + recetas.get(i));
+                }
+            } catch (excepciones.PacienteNoEncontradoException e) {
+                System.out.println("❌ " + e.getMessage());
+            } catch (excepciones.RecetasNoDisponiblesException e) {
+                System.out.println("⚠️ " + e.getMessage());
+            } catch (excepciones.HistoriaClinicaNoEncontradaException e) {
+                System.out.println("❌ " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("❌ Error al consultar recetas: " + e.getMessage());
+            }
+        }
+        case 7 -> { // Ver historia clínica del paciente (Andrés)
+            System.out.print("DNI del paciente: ");
+            String dni = sc.nextLine();
+            Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+            if (pac != null) {
+                System.out.println(pac.getHistoriaClinica());
+            } else {
+                System.out.println("Paciente no encontrado.");
+            }
+        }
+        case 0 -> salir = true;
+        default -> System.out.println("Opcion invalida.");
+    }
+}
+
 
                 // MENU ADMINISTRATIVO
                 else if (personaLogueada instanceof Administrativo adm) {
