@@ -6,6 +6,7 @@ import excepciones.DatoInvalidoException;
 import enums.Especialidad;
 import enums.ObraSocial;
 import org.json.JSONObject;
+import utils.InputUtils;
 
 import java.time.LocalDate;
 import java.util.InputMismatchException;
@@ -24,31 +25,47 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         Persona personaLogueada = null;
+        int maxIntentos = 3;
+        int intentos = 0;
 
-        try {
-            System.out.println("\n=== INICIO DE SESION ===");
+        while (personaLogueada == null && intentos < maxIntentos) {
+            intentos++;
+            System.out.println("\n=== INICIO DE SESION (Intento " + intentos + " de " + maxIntentos + ") ===");
             System.out.print("Correo: ");
             String email = sc.nextLine();
             System.out.print("Contrasenia: ");
             String contrasenia = sc.nextLine();
 
-            personaLogueada = intentarLogin(email, contrasenia, gestorEmpleados, gestorPacientes);
+            try {
+                personaLogueada = intentarLogin(email, contrasenia, gestorEmpleados, gestorPacientes);
 
-            if (personaLogueada == null) {
-                throw new CredencialesIncorrectasException("Datos ingresados incorrectos o usuario no encontrado.");
+                if (personaLogueada == null) {
+                    System.out.println("❌ Datos ingresados incorrectos o usuario no encontrado.");
+                    if (intentos < maxIntentos) {
+                        System.out.println("Intentá nuevamente.\n");
+                    }
+                }
+
+            } catch (CredencialesIncorrectasException e) {
+                System.out.println("❌ " + e.getMessage());
+                if (intentos < maxIntentos) {
+                    System.out.println("Intentá nuevamente.\n");
+                }
+            } catch (Exception e) {
+                System.err.println("⚠️ Ocurrió un error inesperado al intentar iniciar sesión: " + e.getMessage());
+                if (intentos < maxIntentos) {
+                    System.out.println("Podés intentar nuevamente.\n");
+                }
             }
+        }
 
-            System.out.println("\nBienvenido, " + personaLogueada.getNombre() + " (" + personaLogueada.getTipo() + ")");
-
-        } catch (CredencialesIncorrectasException e) {
-            System.out.println(e.getMessage());
-            sc.close();
-            return;
-        } catch (Exception e) {
-            System.err.println("Ocurrio un error inesperado al intentar iniciar sesion.");
+        if (personaLogueada == null) {
+            System.out.println("🚪 Se alcanzó el máximo de intentos permitidos. Cerrando programa...");
             sc.close();
             return;
         }
+
+        System.out.println("\n✅ Bienvenido, " + personaLogueada.getNombre() + " (" + personaLogueada.getTipo() + ")");
 
         boolean salir = false;
         while (!salir) {
@@ -289,182 +306,81 @@ public class Main {
 
     // METODOS DE ALTA (para administrativo) con validacion de datos
 
-    private static void altaProfesional(GestorEmpleadosJson gestor, Scanner sc) throws DatoInvalidoException {
+    private static void altaProfesional(GestorEmpleadosJson gestor, Scanner sc) {
         System.out.println("\n--- Alta de Profesional ---");
-        System.out.print("DNI: ");
-        String dni = sc.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-        System.out.print("Apellido: ");
-        String apellido = sc.nextLine();
-        System.out.print("Nacionalidad: ");
-        String nac = sc.nextLine();
-        System.out.print("Calle: ");
-        String calle = sc.nextLine();
-        System.out.print("Numero: ");
-        int numero;
-        try {
-            numero = sc.nextInt(); sc.nextLine();
-        } catch (InputMismatchException e) {
-            sc.nextLine();
-            throw new DatoInvalidoException("El numero de calle debe ser un valor numerico.");
-        }
-        System.out.print("Depto: ");
-        String depto = sc.nextLine();
-        System.out.print("Ciudad: ");
-        String ciudad = sc.nextLine();
-        System.out.print("Provincia: ");
-        String provincia = sc.nextLine();
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-        System.out.print("Contrasenia: ");
-        String pass = sc.nextLine();
-        System.out.print("Fecha de nacimiento (YYYY-MM-DD): ");
-        String fecha = sc.nextLine();
+        String dni = InputUtils.readDni(sc);
+        String nombre = InputUtils.readNonEmpty(sc, "Nombre");
+        String apellido = InputUtils.readNonEmpty(sc, "Apellido");
+        String nac = InputUtils.readNonEmpty(sc, "Nacionalidad");
+        String calle = InputUtils.readNonEmpty(sc, "Calle");
+        int numero = InputUtils.readInt(sc, "Número");
+        String depto = InputUtils.readNonEmpty(sc, "Depto");
+        String ciudad = InputUtils.readNonEmpty(sc, "Ciudad");
+        String provincia = InputUtils.readNonEmpty(sc, "Provincia");
+        String correo = InputUtils.readEmail(sc);
+        String pass = InputUtils.readNonEmpty(sc, "Contrasenia");
+        LocalDate fechaNac = InputUtils.readDate(sc, "Fecha de nacimiento");
+        String legajo = InputUtils.readAlfanumerico(sc, "Legajo", 3, 12);
+        String matricula = InputUtils.readAlfanumerico(sc, "Matricula", 3, 20);
+        Especialidad especialidad = InputUtils.readEnum(sc, "Especialidad", Especialidad.class); // :contentReference[oaicite:7]{index=7}
 
-        // Validacion de fecha
-        try {
-            LocalDate.parse(fecha);
-        } catch (Exception e) {
-            throw new DatoInvalidoException("Formato de fecha de nacimiento invalido. Use YYYY-MM-DD.");
-        }
-
-        System.out.print("Legajo: ");
-        String legajo = sc.nextLine();
-        System.out.print("Matricula: ");
-        String matricula = sc.nextLine();
-        System.out.print("Especialidad (CARDIOLOGO," +
-                " CIRUJANO," +
-                " CLINICO," +
-                " DERMATOLOGO," +
-                " GINECOLOGO," +
-                " GUARDIA," +
-                " NEUROLOGO," +
-                " ORTOPEDISTA," +
-                " PEDIATRA," +
-                " PSIQUIATRA): ");
-        String espStr = sc.nextLine().toUpperCase();
-
-        // Validacion de Enum
-        try {
-            Especialidad.valueOf(espStr);
-        } catch (IllegalArgumentException e) {
-            throw new DatoInvalidoException("La especialidad ingresada no es valida.");
-        }
-
-        gestor.agregarEmpleado("Profesional", dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
-                correo, pass, fecha, legajo, matricula, espStr, null);
-        gestor.cargarEmpleadoDesdeJson(); // Recargar para que este disponible inmediatamente en la lista
-        System.out.println("Profesional agregado y guardado en empleados.json");
-    }
-
-    private static void altaAdministrativo(GestorEmpleadosJson gestor, Scanner sc) throws DatoInvalidoException {
-        System.out.println("\n--- Alta de Administrativo ---");
-        System.out.print("DNI: ");
-        String dni = sc.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-        System.out.print("Apellido: ");
-        String apellido = sc.nextLine();
-        System.out.print("Nacionalidad: ");
-        String nac = sc.nextLine();
-        System.out.print("Calle: ");
-        String calle = sc.nextLine();
-        System.out.print("Numero: ");
-        int numero;
-        try {
-            numero = sc.nextInt(); sc.nextLine();
-        } catch (InputMismatchException e) {
-            sc.nextLine();
-            throw new DatoInvalidoException("El numero de calle debe ser un valor numerico.");
-        }
-        System.out.print("Depto: ");
-        String depto = sc.nextLine();
-        System.out.print("Ciudad: ");
-        String ciudad = sc.nextLine();
-        System.out.print("Provincia: ");
-        String provincia = sc.nextLine();
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-        System.out.print("Contrasenia: ");
-        String pass = sc.nextLine();
-        System.out.print("Fecha de nacimiento (YYYY-MM-DD): ");
-        String fecha = sc.nextLine();
-
-        // Validacion de fecha
-        try {
-            LocalDate.parse(fecha);
-        } catch (Exception e) {
-            throw new DatoInvalidoException("Formato de fecha de nacimiento invalido. Use YYYY-MM-DD.");
-        }
-
-        System.out.print("Legajo: ");
-        String legajo = sc.nextLine();
-        System.out.print("Sector: ");
-        String sector = sc.nextLine();
-
-        gestor.agregarEmpleado("Administrativo", dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
-                correo, pass, fecha, legajo, null, null, sector);
+        // Si tu gestor fabrica Direccion internamente a partir de strings:
+        gestor.agregarEmpleado(
+                "Profesional", dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
+                correo, pass, fechaNac.toString(), legajo, matricula, especialidad.name(), null
+        );
         gestor.cargarEmpleadoDesdeJson();
-        System.out.println("Administrativo agregado y guardado en empleados.json");
+        System.out.println("✅ Profesional agregado y guardado en empleados.json");
     }
 
-    private static void altaPaciente(GestorPacientesJson gestor, Scanner sc) throws DatoInvalidoException {
+    private static void altaAdministrativo(GestorEmpleadosJson gestor, Scanner sc) {
+        System.out.println("\n--- Alta de Administrativo ---");
+        String dni = InputUtils.readDni(sc);
+        String nombre = InputUtils.readNonEmpty(sc, "Nombre");
+        String apellido = InputUtils.readNonEmpty(sc, "Apellido");
+        String nac = InputUtils.readNonEmpty(sc, "Nacionalidad");
+        String calle = InputUtils.readNonEmpty(sc, "Calle");
+        int numero = InputUtils.readInt(sc, "Número");
+        String depto = InputUtils.readNonEmpty(sc, "Depto");
+        String ciudad = InputUtils.readNonEmpty(sc, "Ciudad");
+        String provincia = InputUtils.readNonEmpty(sc, "Provincia");
+        String correo = InputUtils.readEmail(sc);
+        String pass = InputUtils.readNonEmpty(sc, "Contrasenia");
+        LocalDate fechaNac = InputUtils.readDate(sc, "Fecha de nacimiento");
+        String legajo = InputUtils.readAlfanumerico(sc, "Legajo", 3, 12);
+        String sector = InputUtils.readNonEmpty(sc, "Sector");
+
+        gestor.agregarEmpleado(
+                "Administrativo", dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
+                correo, pass, fechaNac.toString(), legajo, null, null, sector
+        ); // Constructor de clase pide 'sector'. :contentReference[oaicite:8]{index=8}
+        gestor.cargarEmpleadoDesdeJson();
+        System.out.println("✅ Administrativo agregado y guardado en empleados.json");
+    }
+
+    private static void altaPaciente(GestorPacientesJson gestor, Scanner sc) {
         System.out.println("\n--- Alta de Paciente ---");
-        System.out.print("DNI: ");
-        String dni = sc.nextLine();
-        System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
-        System.out.print("Apellido: ");
-        String apellido = sc.nextLine();
-        System.out.print("Nacionalidad: ");
-        String nac = sc.nextLine();
-        System.out.print("Calle: ");
-        String calle = sc.nextLine();
-        System.out.print("Numero: ");
-        int numero;
-        try {
-            numero = sc.nextInt(); sc.nextLine();
-        } catch (InputMismatchException e) {
-            sc.nextLine();
-            throw new DatoInvalidoException("El numero de calle debe ser un valor numerico.");
-        }
-        System.out.print("Depto: ");
-        String depto = sc.nextLine();
-        System.out.print("Ciudad: ");
-        String ciudad = sc.nextLine();
-        System.out.print("Provincia: ");
-        String provincia = sc.nextLine();
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-        System.out.print("Contrasenia: ");
-        String pass = sc.nextLine();
-        System.out.print("Fecha de nacimiento (YYYY-MM-DD): ");
-        String fecha = sc.nextLine();
+        String dni = InputUtils.readDni(sc);
+        String nombre = InputUtils.readNonEmpty(sc, "Nombre");
+        String apellido = InputUtils.readNonEmpty(sc, "Apellido");
+        String nac = InputUtils.readNonEmpty(sc, "Nacionalidad");
+        String calle = InputUtils.readNonEmpty(sc, "Calle");
+        int numero = InputUtils.readInt(sc, "Número");
+        String depto = InputUtils.readNonEmpty(sc, "Depto");
+        String ciudad = InputUtils.readNonEmpty(sc, "Ciudad");
+        String provincia = InputUtils.readNonEmpty(sc, "Provincia");
+        String correo = InputUtils.readEmail(sc);
+        String pass = InputUtils.readNonEmpty(sc, "Contrasenia");
+        LocalDate fechaNac = InputUtils.readDate(sc, "Fecha de nacimiento");
+        String afiliado = InputUtils.readAlfanumerico(sc, "N Afiliado", 3, 20);
+        ObraSocial obra = InputUtils.readEnum(sc, "Obra Social", ObraSocial.class); // Valida enum
 
-        // Validacion de fecha
-        try {
-            LocalDate.parse(fecha);
-        } catch (Exception e) {
-            throw new DatoInvalidoException("Formato de fecha de nacimiento invalido. Use YYYY-MM-DD.");
-        }
-
-        System.out.print("N Afiliado: ");
-        String afiliado = sc.nextLine();
-        System.out.print("Obra Social (EJ: PAMI, OSDE, NINGUNA): ");
-        String obraStr = sc.nextLine().toUpperCase();
-
-        // Validacion de Enum
-        try {
-            ObraSocial.valueOf(obraStr);
-        } catch (IllegalArgumentException e) {
-            throw new DatoInvalidoException("La Obra Social ingresada no es valida.");
-        }
-
-        gestor.agregarPaciente(dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
-                correo, pass, fecha, afiliado, obraStr);
+        gestor.agregarPaciente(
+                dni, nombre, apellido, nac, calle, numero, depto, ciudad, provincia,
+                correo, pass, fechaNac.toString(), afiliado, obra.name()
+        ); // El ctor de Paciente maneja HC para evitar NPE. :contentReference[oaicite:9]{index=9}
         gestor.cargarPacienteDesdeJson();
-        System.out.println("Paciente agregado y guardado en pacientes.json");
+        System.out.println("✅ Paciente agregado y guardado en pacientes.json");
     }
 
     //METODOS PARA MODIFICAR Y ELIMINAR EMPLEADOS Y PACIENTES
