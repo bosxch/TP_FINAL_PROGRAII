@@ -53,7 +53,13 @@
     {
         "historiaClinica": {
             "idPaciente": "40000002",
-            "recetasEmitidas": [],
+            "recetasEmitidas": [{
+                "diagnostico": "Prueba automatizada",
+                "dosis": "1 comprimido",
+                "idReceta": "TEST-001",
+                "medicamento": "Medicamento Test",
+                "fechaEmision": "2025-11-10"
+            }],
             "antecedentesMedicos": [],
             "historialTurnos": [],
             "idHistoriaClinica": "HC-40000002"
