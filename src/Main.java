@@ -82,7 +82,8 @@ public class Main {
                     System.out.println("3. Ver turnos ocupados");
                     System.out.println("4. Agregar receta a paciente");
                     System.out.println("5. Agregar antecedente a paciente");
-                    System.out.println("6. Salir");
+                    System.out.println("6. Ver la historia clinica del paciente");
+                    System.out.println("7. Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -120,7 +121,15 @@ public class Main {
                                 System.out.println("Antecedente agregado y guardado.");
                             } else System.out.println("Paciente no encontrado.");
                         }
-                        case 6 -> salir = true;
+                        case 6 -> {
+                            System.out.print("DNI del paciente: ");
+                            String dni = sc.nextLine();
+                            Paciente pac = gestorPacientes.buscarPacientePorDni(dni);
+                            if (pac != null) {
+                                System.out.println(pac.getHistoriaClinica());
+                            } else System.out.println("Paciente no encontrado.");
+                        }
+                        case 7 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
