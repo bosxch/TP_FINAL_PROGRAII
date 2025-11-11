@@ -38,6 +38,21 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     public void setTodasLasHistorias(List<HistoriaClinica> todasLasHistorias) {
         this.todasLasHistorias = todasLasHistorias;
     }
+    // Devuelve todos los turnos de la agenda
+        public List<Turno> getTurnos () {
+            return this.agenda;
+        }
+
+        // Devuelve únicamente los turnos disponibles
+        public List<Turno> getTurnosDisponibles() {
+            List<Turno> disponibles = new ArrayList<>();
+            for (Turno t : agenda) {
+                if (t.getIdPaciente() == null && !t.getDia().isBefore(LocalDate.now())) {
+                    disponibles.add(t);
+                }
+            }
+            return disponibles;
+    }
     @Override
     public String getTipo() {
         return "Profesional";
@@ -46,6 +61,10 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
     public String getMatricula() {
         return matricula;
     }
+    public String getIdProfesional() {
+        return this.matricula;
+    }
+
 
     public void setMatricula(String matricula) {
         this.matricula = matricula;
@@ -210,6 +229,16 @@ public class Profesional extends Empleado implements IConsultarHistoriaClinica {
         }
         // Si el contador nunca coincide (porque el índice es demasiado grande o la lista estaba vacía)
         return null;
+    }
+
+    // MÉTODO PARA LIBERAR UN TURNO (lo vuelve a dejar disponible)
+    public void liberarTurno(Turno turno) {
+        for (Turno t : agenda) {
+            if (t.getIdTurno().equals(turno.getIdTurno())) {
+                t.setIdPaciente(null); // vuelve a estar libre
+                return;
+            }
+        }
     }
     //CONSULTAR HISTORIA CLINICA
     @Override

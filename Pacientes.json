@@ -25,13 +25,6 @@
                 },
                 {
                     "idPaciente": "40000001",
-                    "idProfesional": "M-12345",
-                    "hora": "09:00",
-                    "dia": "2025-11-10",
-                    "idTurno": "T2"
-                },
-                {
-                    "idPaciente": "40000001",
                     "idProfesional": "M-67890",
                     "hora": "12:00",
                     "dia": "2025-12-10",

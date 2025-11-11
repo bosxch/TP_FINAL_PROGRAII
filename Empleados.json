@@ -11,22 +11,13 @@
         },
         "nombre": "Laura",
         "especialidad": "CARDIOLOGO",
-        "agenda": [
-            {
-                "idPaciente": null,
-                "idProfesional": "M-12345",
-                "hora": "08:00",
-                "dia": "2025-11-10",
-                "idTurno": "T1"
-            },
-            {
-                "idPaciente": "40000001",
-                "idProfesional": "M-12345",
-                "hora": "09:00",
-                "dia": "2025-11-10",
-                "idTurno": "T2"
-            }
-        ],
+        "agenda": [{
+            "idPaciente": "40000001",
+            "idProfesional": "M-12345",
+            "hora": "08:00",
+            "dia": "2025-11-11",
+            "idTurno": "e746bb85-fe81-4dff-9f4a-902681d369ae"
+        }],
         "nacionalidad": "Argentina",
         "legajo": "P001",
         "apellido": "Martínez",

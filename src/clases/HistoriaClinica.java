@@ -74,6 +74,9 @@ public class HistoriaClinica {
     public void agregarAntecedente(Antecedentes antecedente) {
         this.antecedentesMedicos.add(antecedente);
     }
+    public void eliminarTurno(Turno turno) {
+        historialTurnos.remove(turno);
+    }
 
     @Override
     public String toString() {

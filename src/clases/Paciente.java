@@ -209,4 +209,82 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
 
         System.out.println("Turno guardado correctamente en los archivos JSON.");
     }
+
+    public void mostrarMisTurnos(boolean numerar, List<Profesional> listaProfesionales) {
+        List<Turno> turnos = historiaClinica.getHistorialTurnos();
+
+        if (turnos.isEmpty()) {
+            System.out.println("No tiene turnos registrados.");
+            return;
+        }
+
+        System.out.println("=== Mis Turnos ===");
+        int index = 1;
+
+        for (Turno turno : turnos) {
+            // Buscar el profesional correspondiente
+            Profesional profesional = listaProfesionales.stream()
+                    .filter(p -> p.getIdProfesional().equals(turno.getIdProfesional()))
+                    .findFirst()
+                    .orElse(null);
+
+            String nombreProfesional = (profesional != null)
+                    ? profesional.getNombre() + " " + profesional.getApellido()
+                    : "Profesional no encontrado";
+
+            if (numerar) {
+                System.out.println(index + ". " +
+                        turno.getDia() + " " + turno.getHora() +
+                        " - Profesional: " + nombreProfesional);
+                index++;
+            } else {
+                System.out.println(
+                        turno.getDia() + " " + turno.getHora() +
+                                " - Profesional: " + nombreProfesional);
+            }
+        }
+    }
+
+    public void cancelarTurno(int indiceTurno, List<Profesional> profesionales) {
+        List<Turno> turnos = historiaClinica.getHistorialTurnos();
+
+        if (turnos.isEmpty()) {
+            System.out.println("No tienes turnos para cancelar.");
+            return;
+        }
+
+        if (indiceTurno < 0 || indiceTurno >= turnos.size()) {
+            System.out.println("Número de turno inválido.");
+            return;
+        }
+
+        Turno turnoACancelar = turnos.get(indiceTurno);
+        Profesional profesional = buscarProfesionalPorTurno(profesionales, turnoACancelar);
+
+        if (profesional != null) {
+            profesional.getTurnosDisponibles().add(turnoACancelar);
+            turnos.remove(turnoACancelar);
+            System.out.println("Turno cancelado correctamente.");
+        } else {
+            System.out.println("No se encontró el profesional del turno.");
+        }
+    }
+
+    private Profesional buscarProfesionalPorTurno(List<Profesional> listaProfesionales, Turno turno) {
+        for (Profesional profesional : listaProfesionales) {
+            // Coincide por matrícula (idProfesional del turno)
+            if (profesional.getMatricula().equals(turno.getIdProfesional())) {
+                // Confirmamos que el profesional tiene ese turno (por fecha y hora)
+                for (Turno t : profesional.getTurnos()) {
+                    if (t.getDia().equals(turno.getDia()) &&
+                            t.getHora().equals(turno.getHora())) {
+                        return profesional;
+                    }
+                }
+            }
+        }
+        return null; // No se encontró el profesional correspondiente
+    }
+
+
 }

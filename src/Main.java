@@ -58,7 +58,9 @@ public class Main {
                     System.out.println("1. Sacar turno");
                     System.out.println("2. Ver historia clinica");
                     System.out.println("3. Ver recetas emitidas");
-                    System.out.println("4. Salir");
+                    System.out.println("4. Cancelar turno");
+                    System.out.println("5. Ver mis turnos");
+                    System.out.println("6. Salir");
                     System.out.print("Opcion: ");
                     int op = leerOpcion(sc);
 
@@ -69,7 +71,15 @@ public class Main {
 
                         case 2 -> System.out.println(paciente.getHistoriaClinica());
                         case 3 -> paciente.getHistoriaClinica().getRecetasEmitidas().forEach(System.out::println);
-                        case 4 -> salir = true;
+                        case 4 -> {
+                            paciente.mostrarMisTurnos(true, gestorEmpleados.getListaProfesionales());
+                            System.out.print("Ingrese el número del turno que desea cancelar: ");
+                            int opcion = sc.nextInt() - 1;
+                            sc.nextLine(); // limpiar buffer
+                            paciente.cancelarTurno(opcion, gestorEmpleados.getListaProfesionales());
+                        }
+                        case 5 -> paciente.mostrarMisTurnos(true, gestorEmpleados.getListaProfesionales());
+                        case 6 -> salir = true;
                         default -> System.out.println("Opcion invalida.");
                     }
                 }
