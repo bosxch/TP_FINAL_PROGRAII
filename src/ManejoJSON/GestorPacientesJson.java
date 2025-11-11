@@ -202,8 +202,9 @@ public class GestorPacientesJson {
                 if (pacObj.getString("dni").equals(paciente.getDni())) {
 
                     JSONObject hcObj = pacObj.getJSONObject("historiaClinica");
+                    
+                    // Sincronizar turnos
                     JSONArray nuevosTurnos = new JSONArray();
-
                     for (Turno t : paciente.getHistoriaClinica().getHistorialTurnos()) {
                         JSONObject turnoJson = new JSONObject();
                         turnoJson.put("idTurno", t.getIdTurno());
@@ -211,10 +212,35 @@ public class GestorPacientesJson {
                         turnoJson.put("idProfesional", t.getIdProfesional());
                         turnoJson.put("dia", t.getDia().toString());
                         turnoJson.put("hora", t.getHora().toString());
-                        nuevosTurnos.put(turnoJson); // 👈 Esta es la línea correcta
+                        nuevosTurnos.put(turnoJson);
                     }
-
                     hcObj.put("historialTurnos", nuevosTurnos);
+                    
+                    // Sincronizar recetas
+                    JSONArray nuevasRecetas = new JSONArray();
+                    for (Receta r : paciente.getHistoriaClinica().getRecetasEmitidas()) {
+                        JSONObject recetaJson = new JSONObject();
+                        recetaJson.put("idReceta", r.getIdReceta());
+                        recetaJson.put("diagnostico", r.getDiagnostico());
+                        recetaJson.put("medicamento", r.getMedicamento());
+                        recetaJson.put("dosis", r.getDosis());
+                        recetaJson.put("fechaEmision", r.getFechaEmision().toString());
+                        nuevasRecetas.put(recetaJson);
+                    }
+                    hcObj.put("recetasEmitidas", nuevasRecetas);
+                    
+                    // Sincronizar antecedentes
+                    JSONArray nuevosAntecedentes = new JSONArray();
+                    for (Antecedentes a : paciente.getHistoriaClinica().getAntecedentesMedicos()) {
+                        JSONObject antJson = new JSONObject();
+                        antJson.put("idRegistro", a.getIdRegistro());
+                        antJson.put("descripcion", a.getDescripcion());
+                        antJson.put("tipoAntecedente", a.getTipoAntecedente());
+                        antJson.put("fechaRegistro", a.getFechaRegistro().toString());
+                        nuevosAntecedentes.put(antJson);
+                    }
+                    hcObj.put("antecedentesMedicos", nuevosAntecedentes);
+                    
                     pacObj.put("historiaClinica", hcObj);
                     break;
                 }
@@ -311,6 +337,8 @@ public class GestorPacientesJson {
                 historiaClinica.setRecetasEmitidas(recetasEmitidas);
                 historiaClinica.setAntecedentesMedicos(antecedentesMedicos);
 
+                // Usar el constructor que recibe la HistoriaClinica directamente
+                // para evitar crear una historia clínica vacía y luego reemplazarla
                 Paciente paciente = new Paciente(
                         obj.getString("dni"),
                         obj.getString("nombre"),
@@ -321,11 +349,10 @@ public class GestorPacientesJson {
                         obj.getString("contrasenia"),
                         LocalDate.parse(obj.getString("fechaNacimiento")),
                         obj.getString("nroAfiliado"),
-                        ObraSocial.valueOf(obj.getString("obraSocial").trim().toUpperCase())
-
+                        ObraSocial.valueOf(obj.getString("obraSocial").trim().toUpperCase()),
+                        historiaClinica  // Pasar la historia clínica directamente al constructor
                 );
 
-                paciente.setHistoriaClinica(historiaClinica);
                 listaPacientes.add(paciente);
             }
             if (usuarios == null) {

@@ -2,13 +2,22 @@
     {
         "historiaClinica": {
             "idPaciente": "40000001",
-            "recetasEmitidas": [{
-                "diagnostico": "Gripe A",
-                "dosis": "Cada 8 horas por 5 dias",
-                "idReceta": "R-001-2025",
-                "medicamento": "Ibuprofeno 600mg",
-                "fechaEmision": "2025-11-01"
-            }],
+            "recetasEmitidas": [
+                {
+                    "diagnostico": "Gripe A",
+                    "dosis": "Cada 8 horas por 5 dias",
+                    "idReceta": "R-001-2025",
+                    "medicamento": "Ibuprofeno 600mg",
+                    "fechaEmision": "2025-11-01"
+                },
+                {
+                    "diagnostico": "cancer",
+                    "dosis": "esperar el final eterno",
+                    "idReceta": "2179efa4-67cf-4341-bc0f-1898c0e1b29e",
+                    "medicamento": "nada, esperar",
+                    "fechaEmision": "2025-11-10"
+                }
+            ],
             "antecedentesMedicos": [{
                 "descripcion": "Alergia a la penicilina",
                 "tipoAntecedente": "Alergia",
@@ -22,13 +31,6 @@
                     "hora": "10:30",
                     "dia": "2025-11-15",
                     "idTurno": "T-001-2025"
-                },
-                {
-                    "idPaciente": "40000001",
-                    "idProfesional": "M-12345",
-                    "hora": "09:00",
-                    "dia": "2025-11-10",
-                    "idTurno": "T2"
                 },
                 {
                     "idPaciente": "40000001",
@@ -60,8 +62,144 @@
     {
         "historiaClinica": {
             "idPaciente": "40000002",
-            "recetasEmitidas": [],
-            "antecedentesMedicos": [],
+            "recetasEmitidas": [
+                {
+                    "diagnostico": "Prueba automatizada",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-001",
+                    "medicamento": "Medicamento Test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Prueba automatizada",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-001",
+                    "medicamento": "Medicamento Test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-10"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-11"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-11"
+                },
+                {
+                    "diagnostico": "Diagnóstico test",
+                    "dosis": "1 comprimido",
+                    "idReceta": "TEST-RECETA",
+                    "medicamento": "Medicamento test",
+                    "fechaEmision": "2025-11-11"
+                },
+                {
+                    "diagnostico": "Test persistencia",
+                    "dosis": "1",
+                    "idReceta": "PERSIST-TEST",
+                    "medicamento": "Med test",
+                    "fechaEmision": "2025-11-11"
+                }
+            ],
+            "antecedentesMedicos": [
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-10",
+                    "idRegistro": "TEST-ANT"
+                },
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-10",
+                    "idRegistro": "TEST-ANT"
+                },
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-10",
+                    "idRegistro": "TEST-ANT"
+                },
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-10",
+                    "idRegistro": "TEST-ANT"
+                },
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-11",
+                    "idRegistro": "TEST-ANT"
+                },
+                {
+                    "descripcion": "Antecedente de prueba",
+                    "tipoAntecedente": "Test",
+                    "fechaRegistro": "2025-11-11",
+                    "idRegistro": "TEST-ANT"
+                }
+            ],
             "historialTurnos": [],
             "idHistoriaClinica": "HC-40000002"
         },
@@ -162,5 +300,30 @@
         "correoElectronico": "manu@gmail.com",
         "dni": "43626441",
         "nacionalidad": "Uruguayo"
+    },
+    {
+        "historiaClinica": {
+            "idPaciente": "1232532",
+            "recetasEmitidas": [],
+            "antecedentesMedicos": [],
+            "historialTurnos": [],
+            "idHistoriaClinica": "HC-1232532"
+        },
+        "fechaNacimiento": "2001-12-12",
+        "obraSocial": "IOMA",
+        "apellido": "lopez",
+        "direccion": {
+            "numero": 123,
+            "ciudad": "mdq",
+            "calle": "boulevard 123",
+            "departamento": "3",
+            "provincia": "bsas"
+        },
+        "contrasenia": "12345",
+        "nroAfiliado": "323233",
+        "nombre": "fran",
+        "correoElectronico": "flopez@gmail.com",
+        "dni": "1232532",
+        "nacionalidad": "argentina"
     }
 ]

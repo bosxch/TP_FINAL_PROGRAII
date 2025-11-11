@@ -50,7 +50,7 @@ public class Receta {
 
     @Override
     public String toString() {
-        return "Receta [Medicamento=" + medicamento + ", Dosis=" + dosis + ", Fecha=" + fechaEmision + "]";
+        return "Receta [Diagnostico=" + diagnostico + ", Medicamento=" + medicamento + ", Dosis=" + dosis + ", Fecha=" + fechaEmision + "]";
     }
 
 

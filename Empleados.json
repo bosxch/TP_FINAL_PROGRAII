@@ -11,22 +11,13 @@
         },
         "nombre": "Laura",
         "especialidad": "CARDIOLOGO",
-        "agenda": [
-            {
-                "idPaciente": null,
-                "idProfesional": "M-12345",
-                "hora": "08:00",
-                "dia": "2025-11-10",
-                "idTurno": "T1"
-            },
-            {
-                "idPaciente": "40000001",
-                "idProfesional": "M-12345",
-                "hora": "09:00",
-                "dia": "2025-11-10",
-                "idTurno": "T2"
-            }
-        ],
+        "agenda": [{
+            "idPaciente": "40000001",
+            "idProfesional": "M-12345",
+            "hora": "08:00",
+            "dia": "2025-11-11",
+            "idTurno": "e746bb85-fe81-4dff-9f4a-902681d369ae"
+        }],
         "nacionalidad": "Argentina",
         "legajo": "P001",
         "apellido": "Martínez",
@@ -126,5 +117,66 @@
         "contrasenia": "1234",
         "correoElectronico": "juan@correo.com",
         "dni": "101"
+    },
+    {
+        "tipo": "Profesional",
+        "fechaNacimiento": "2001-10-10",
+        "direccion": {
+            "numero": 123,
+            "ciudad": "mar del plata",
+            "calle": "donde 123",
+            "departamento": "av colon 5432",
+            "provincia": "bs as"
+        },
+        "nombre": "Pilar",
+        "especialidad": "CARDIOLOGO",
+        "agenda": [],
+        "nacionalidad": "Arg",
+        "legajo": "234534",
+        "apellido": "Marquez",
+        "matricula": "23425",
+        "contrasenia": "123456",
+        "correoElectronico": "pepe@pepe.com",
+        "dni": "43543634"
+    },
+    {
+        "tipo": "Profesional",
+        "fechaNacimiento": "2001-12-12",
+        "direccion": {
+            "numero": 123,
+            "ciudad": "mdp",
+            "calle": "siempre vivi",
+            "departamento": "4d",
+            "provincia": "la rioja"
+        },
+        "nombre": "432",
+        "especialidad": "CARDIOLOGO",
+        "agenda": [],
+        "nacionalidad": "argentina",
+        "legajo": "243324",
+        "apellido": "32432",
+        "matricula": "4234234",
+        "contrasenia": "11245",
+        "correoElectronico": "pedro@goail.com",
+        "dni": "43964669"
+    },
+    {
+        "tipo": "Administrativo",
+        "legajo": "12345",
+        "fechaNacimiento": "2001-12-01",
+        "apellido": "alfonsa",
+        "direccion": {
+            "numero": 123,
+            "ciudad": "marvella",
+            "calle": "marvella",
+            "departamento": "4d",
+            "provincia": "marvella"
+        },
+        "contrasenia": "123456",
+        "nombre": "pedro",
+        "correoElectronico": "marvella@consultorioas.com",
+        "sector": "compras",
+        "dni": "43864669",
+        "nacionalidad": "chile"
     }
 ]

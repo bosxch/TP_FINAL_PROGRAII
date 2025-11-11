@@ -82,10 +82,49 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
     //METODO PARA CONSULTAR RECETAS
     @Override
     public List<Receta> consultarRecetas(String dniPaciente) {
-        if (historiaClinica.getIdPaciente().equals(dniPaciente)) {
-            return historiaClinica.getRecetasEmitidas();
+        // Validar que el DNI coincida con el paciente actual
+        if (!this.getDni().equals(dniPaciente)) {
+            throw new excepciones.HistoriaClinicaNoEncontradaException(
+                "El DNI proporcionado no coincide con el paciente actual."
+            );
         }
-        return new ArrayList<>();
+        
+        // Validar que la historia clínica exista
+        if (historiaClinica == null) {
+            throw new excepciones.HistoriaClinicaNoEncontradaException(
+                "No se encontró la historia clínica para el paciente con DNI " + dniPaciente
+            );
+        }
+        
+        // Obtener las recetas
+        List<Receta> recetas = historiaClinica.getRecetasEmitidas();
+        
+        // Validar que la lista de recetas no sea null o vacía
+        if (recetas == null || recetas.isEmpty()) {
+            throw new excepciones.RecetasNoDisponiblesException(
+                "El paciente con DNI " + dniPaciente + " no tiene recetas emitidas."
+            );
+        }
+        
+        return recetas;
+    }
+    
+    //METODO PARA MOSTRAR RECETAS CON VALIDACIÓN
+    public void mostrarRecetas() {
+        try {
+            List<Receta> recetas = consultarRecetas(this.getDni());
+            System.out.println("\n=== RECETAS EMITIDAS ===");
+            System.out.println("Paciente: " + this.getNombre() + " " + this.getApellido() + " (DNI: " + this.getDni() + ")");
+            System.out.println("Total de recetas: " + recetas.size());
+            System.out.println("------------------------");
+            for (int i = 0; i < recetas.size(); i++) {
+                System.out.println((i + 1) + ". " + recetas.get(i));
+            }
+        } catch (excepciones.RecetasNoDisponiblesException e) {
+            System.out.println("\n⚠️ " + e.getMessage());
+        } catch (excepciones.HistoriaClinicaNoEncontradaException e) {
+            System.out.println("\n❌ " + e.getMessage());
+        }
     }
 
     //METODO PARA SACAR TURNO (CORREGIDO)
@@ -209,4 +248,82 @@ public class Paciente extends Persona implements IConsultarHistoriaClinica {
 
         System.out.println("Turno guardado correctamente en los archivos JSON.");
     }
+
+    public void mostrarMisTurnos(boolean numerar, List<Profesional> listaProfesionales) {
+        List<Turno> turnos = historiaClinica.getHistorialTurnos();
+
+        if (turnos.isEmpty()) {
+            System.out.println("No tiene turnos registrados.");
+            return;
+        }
+
+        System.out.println("=== Mis Turnos ===");
+        int index = 1;
+
+        for (Turno turno : turnos) {
+            // Buscar el profesional correspondiente
+            Profesional profesional = listaProfesionales.stream()
+                    .filter(p -> p.getIdProfesional().equals(turno.getIdProfesional()))
+                    .findFirst()
+                    .orElse(null);
+
+            String nombreProfesional = (profesional != null)
+                    ? profesional.getNombre() + " " + profesional.getApellido()
+                    : "Profesional no encontrado";
+
+            if (numerar) {
+                System.out.println(index + ". " +
+                        turno.getDia() + " " + turno.getHora() +
+                        " - Profesional: " + nombreProfesional);
+                index++;
+            } else {
+                System.out.println(
+                        turno.getDia() + " " + turno.getHora() +
+                                " - Profesional: " + nombreProfesional);
+            }
+        }
+    }
+
+    public void cancelarTurno(int indiceTurno, List<Profesional> profesionales) {
+        List<Turno> turnos = historiaClinica.getHistorialTurnos();
+
+        if (turnos.isEmpty()) {
+            System.out.println("No tienes turnos para cancelar.");
+            return;
+        }
+
+        if (indiceTurno < 0 || indiceTurno >= turnos.size()) {
+            System.out.println("Número de turno inválido.");
+            return;
+        }
+
+        Turno turnoACancelar = turnos.get(indiceTurno);
+        Profesional profesional = buscarProfesionalPorTurno(profesionales, turnoACancelar);
+
+        if (profesional != null) {
+            profesional.getTurnosDisponibles().add(turnoACancelar);
+            turnos.remove(turnoACancelar);
+            System.out.println("Turno cancelado correctamente.");
+        } else {
+            System.out.println("No se encontró el profesional del turno.");
+        }
+    }
+
+    private Profesional buscarProfesionalPorTurno(List<Profesional> listaProfesionales, Turno turno) {
+        for (Profesional profesional : listaProfesionales) {
+            // Coincide por matrícula (idProfesional del turno)
+            if (profesional.getMatricula().equals(turno.getIdProfesional())) {
+                // Confirmamos que el profesional tiene ese turno (por fecha y hora)
+                for (Turno t : profesional.getTurnos()) {
+                    if (t.getDia().equals(turno.getDia()) &&
+                            t.getHora().equals(turno.getHora())) {
+                        return profesional;
+                    }
+                }
+            }
+        }
+        return null; // No se encontró el profesional correspondiente
+    }
+
+
 }
